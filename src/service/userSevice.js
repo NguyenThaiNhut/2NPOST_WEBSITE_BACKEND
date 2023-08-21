@@ -4,6 +4,99 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
+//them 1 nguoi dung moi vào database - trả về thông tin user nếu thêm thành công
+let createNewUser = (userInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (userInput.email) {
+                let check = await checkUserEmail(userInput.email);
+                if (check) {
+                    resolve({
+                        errCode: 1,
+                        message: 'Your email is already exist, Please try another email'
+                    })
+                } else {
+                    if (userInput.password) {
+                        let hashPasswordFromBcrypt = await hashUserPassword(userInput.password)
+                        await db.User.create({
+                            firstName: userInput.firstName,
+                            lastName: userInput.lastName,
+                            birthday: userInput.birthday,
+                            gender: userInput.gender === '1' ? true : false,
+                            address: userInput.address,
+                            email: userInput.email,
+                            password: hashPasswordFromBcrypt,
+                            phone: userInput.phoneNumber,
+                            status: userInput.status,
+                            idRole: userInput.idRole,
+                        })
+
+                        let user = await db.User.findOne({
+                            where: { email: userInput.email },
+                            raw: true,
+                        })
+
+                        delete user.password
+
+                        console.log('check user: ', user)
+                        resolve({
+                            errCode: 0,
+                            message: 'OK',
+                            data: user,
+                        })
+                    } else {
+                        resolve({
+                            errCode: 3,
+                            message: 'Password not found',
+                        })
+                    }
+                }
+            } else {
+                resolve({
+                    errCode: 2,
+                    message: 'Email not found',
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+// kiểm tra email đã tồn tại trong database hay chưa, trả về true nếu đã tồn tại, ngược lại là false
+let checkUserEmail = (userEmail) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: {
+                    email: userEmail
+                }
+            })
+
+            if (user) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+//băm mật khẩu của người dùng  
+let hashUserPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hashPassword = await bcrypt.hashSync(password, salt);
+            resolve(hashPassword)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         let userData = {};
@@ -74,70 +167,6 @@ let getAllUsers = (userId) => {
 
         } catch (error) {
             reject(error);
-        }
-    })
-}
-
-let createNewUser = (userInput) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let check = await checkUserEmail(userInput.email);
-            if (check) {
-                resolve({
-                    errCode: 1,
-                    message: 'Your email is already exist, Please try another email'
-                })
-            } else {
-                let hashPasswordFromBcrypt = await hashUserPassword(userInput.password)
-                await db.User.create({
-                    email: userInput.email,
-                    password: hashPasswordFromBcrypt,
-                    firstName: userInput.firstName,
-                    lastName: userInput.lastName,
-                    address: userInput.address,
-                    phoneNumber: userInput.phoneNumber,
-                    gender: userInput.gender === '1' ? true : false,
-                    roleId: userInput.roleId,
-                })
-                resolve({
-                    errCode: 0,
-                    message: 'OK'
-                })
-            }
-        } catch (error) {
-            reject(error);
-        }
-    })
-}
-
-let checkUserEmail = (userEmail) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let user = await db.User.findOne({
-                where: {
-                    email: userEmail
-                }
-            })
-
-            if (user) {
-                resolve(true)
-            } else {
-                resolve(false)
-            }
-
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
-
-let hashUserPassword = (password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let hashPassword = await bcrypt.hashSync(password, salt);
-            resolve(hashPassword)
-        } catch (error) {
-            reject(error)
         }
     })
 }

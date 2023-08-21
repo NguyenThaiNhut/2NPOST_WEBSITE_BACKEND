@@ -1,5 +1,14 @@
 import userService from '../service/userSevice'
 
+//them 1 nguoi dung moi 
+let handleCreateNewUser = async (req, res) => {
+    let userInput = req.body;
+    let message = await userService.createNewUser(userInput);
+
+    return res.status(200).json(message)
+}
+
+
 let handleLogin = async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
@@ -31,13 +40,6 @@ let handleGetAllUsers = async (req, res) => {
         message: 'OK',
         users: users
     })
-}
-
-let handleCreateNewUser = async (req, res) => {
-    let userInput = req.body;
-    let message = await userService.createNewUser(userInput);
-
-    return res.status(200).json(message)
 }
 
 // code sau //

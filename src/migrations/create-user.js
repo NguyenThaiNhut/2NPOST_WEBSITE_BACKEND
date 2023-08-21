@@ -8,34 +8,34 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
       firstName: {
         type: Sequelize.STRING
       },
       lastName: {
         type: Sequelize.STRING
       },
-      address: {
-        type: Sequelize.STRING
-      },
-      phoneNumber: {
-        type: Sequelize.STRING
-      },
-      image: {
+      birthday: {
         type: Sequelize.STRING
       },
       gender: {
-        type: Sequelize.BOOLEAN
-      },
-      roleId: {
         type: Sequelize.STRING
       },
-      positionId: {
+      address: {
+        type: Sequelize.TEXT
+      },
+      email: {
+        type: Sequelize.STRING
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      phone: {
+        type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING
+      },
+      idRole: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -46,9 +46,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    }
-
-    );
+    });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Users');
