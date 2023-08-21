@@ -7,9 +7,10 @@ let router = express.Router();
 const initAPIRoute = (app) => {
 
     router.post('/create-new-user', userController.handleCreateNewUser)
+    router.get('/get-all-users', userController.handleGetAllUsers)
 
     router.post('/login', userController.handleLogin)
-    router.get('/get-all-users', userController.handleGetAllUsers)
+
 
     router.put('/edit-user', userController.handleEditUser)
     router.delete('/delete-user', userController.handleDeleteUser)

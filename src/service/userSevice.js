@@ -97,6 +97,36 @@ let hashUserPassword = (password) => {
     })
 }
 
+//lấy tất cả người dùng trong database
+let getAllUsers = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = '';
+            if (userId === 'ALL') {
+                users = await db.User.findAll({
+                    attributes: {
+                        exclude: ['password']
+                    },
+                })
+            }
+            if (userId && userId !== 'ALL') {
+                users = await db.User.findOne({
+                    where: {
+                        id: userId,
+                    },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                })
+            }
+            resolve(users)
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         let userData = {};
@@ -135,35 +165,6 @@ let handleUserLogin = (email, password) => {
             }
 
             resolve(userData);
-
-        } catch (error) {
-            reject(error);
-        }
-    })
-}
-
-let getAllUsers = (userId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let users = '';
-            if (userId === 'ALL') {
-                users = await db.User.findAll({
-                    attributes: {
-                        exclude: ['password']
-                    },
-                })
-            }
-            if (userId && userId !== 'ALL') {
-                users = await db.User.findOne({
-                    where: {
-                        id: userId,
-                    },
-                    attributes: {
-                        exclude: ['password']
-                    },
-                })
-            }
-            resolve(users)
 
         } catch (error) {
             reject(error);
