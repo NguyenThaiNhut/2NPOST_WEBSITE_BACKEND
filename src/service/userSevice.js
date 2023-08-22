@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 const salt = bcrypt.genSaltSync(10);
 
-//them 1 nguoi dung moi vào database - trả về thông tin user nếu thêm thành công
+////tạo mới người dùng vào database - trả về thông tin user nếu thêm thành công
 let createNewUser = (userInput) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -22,11 +22,11 @@ let createNewUser = (userInput) => {
                             firstName: userInput.firstName,
                             lastName: userInput.lastName,
                             birthday: userInput.birthday,
-                            gender: userInput.gender === '1' ? true : false,
+                            genderId: userInput.genderId === 'M' ? true : false,
                             address: userInput.address,
                             email: userInput.email,
                             password: hashPasswordFromBcrypt,
-                            phone: userInput.phoneNumber,
+                            phone: userInput.phone,
                             status: userInput.status,
                             idRole: userInput.idRole,
                         })

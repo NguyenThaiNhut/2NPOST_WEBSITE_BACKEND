@@ -6,14 +6,18 @@ let router = express.Router();
 
 const initAPIRoute = (app) => {
 
-    router.post('/create-new-user', userController.handleCreateNewUser)
-    router.get('/get-all-users', userController.handleGetAllUsers)
+    router.post('/create-new-user', userController.handleCreateNewUser) //tạo mới người dùng
+    router.get('/get-all-users', userController.handleGetAllUsers) //lấy tất cả người dùng / lấy người dùng theo id
 
-    router.post('/login', userController.handleLogin)
+    router.post('/login', userController.handleLogin) //đăng nhập
 
 
     router.put('/edit-user', userController.handleEditUser)
     router.delete('/delete-user', userController.handleDeleteUser)
+
+    router.post('/test', (req, res) => {
+        res.send('test api');
+    })
 
     return app.use('/api/', router)
 }
