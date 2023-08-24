@@ -22,15 +22,12 @@ let handleLogin = async (req, res) => {
     }
 
     // check email ton tai? // check pass hop le?
-    let userData = await userService.handleUserLogin(email, password);
+    let message = await userService.handleUserLogin(email, password);
 
-    return res.status(200).json({
-        errCode: userData.errCode,
-        message: userData.message,
-        user: userData.user ? userData.user : {},
-    })
+    return res.status(200).json(message)
 }
 
+// lấy tất cả người dùng
 let handleGetAllUsers = async (req, res) => {
     let idUser = req.query.id; //all , id
     let users = await userService.getAllUsers(idUser);
@@ -42,17 +39,19 @@ let handleGetAllUsers = async (req, res) => {
     })
 }
 
-// code sau //
+// chỉnh sửa thông tin người dùng
 let handleEditUser = async (req, res) => {
     let user = req.body;
+    console.log('check user edit: ', user)
+
     let message = await userService.updateUser(user);
 
     return res.status(200).json(message)
 }
 
+// xóa người dùng theo id
 let handleDeleteUser = async (req, res) => {
     let id = req.body.id;
-    console.log(id)
     if (!id) {
         return res.status(200).json({
             errCode: 1,

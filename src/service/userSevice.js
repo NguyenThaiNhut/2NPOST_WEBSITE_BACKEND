@@ -127,6 +127,7 @@ let getAllUsers = (userId) => {
     })
 }
 
+//đăng nhập
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         let userData = {};
@@ -147,20 +148,19 @@ let handleUserLogin = (email, password) => {
                     if (check) {
                         userData.errCode = 0;
                         userData.message = 'Login successful';
-
                         delete user.password;
                         userData.user = user;
                     } else {
-                        userData.errCode = 3;
+                        userData.errCode = 4;
                         userData.message = 'Password mismatch'
                     }
                 } else {
-                    userData.errCode = 2;
+                    userData.errCode = 3;
                     userData.message = `User's not found~`
                 }
 
             } else {
-                userData.errCode = 1;
+                userData.errCode = 2;
                 userData.message = `Your's email isn't exist in your system. Please try again`
             }
 
@@ -172,36 +172,7 @@ let handleUserLogin = (email, password) => {
     })
 }
 
-let deleteUser = async (idUserDel) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let foundUser = await db.User.findOne({
-                where: { id: idUserDel }
-            })
-
-            if (foundUser) {
-                await db.User.destroy({
-                    where: {
-                        id: idUserDel
-                    },
-                });
-                resolve({
-                    errCode: 0,
-                    message: 'The user has been deleted'
-                })
-            } else {
-                resolve({
-                    errCode: 1,
-                    message: `The user isn't exist`
-                })
-            }
-
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
-
+// chỉnh sửa thông tin người dùng
 let updateUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -213,9 +184,10 @@ let updateUser = (data) => {
                 if (user) {
                     user.firstName = data.firstName;
                     user.lastName = data.lastName;
+                    user.birthday = data.birthday;
+                    user.genderId = data.genderId;
                     user.address = data.address;
-                    user.phoneNumber = data.phoneNumber;
-                    // user.gender = data.gender;
+                    user.phone = data.phone;
 
                     await user.save();
 
@@ -238,6 +210,37 @@ let updateUser = (data) => {
 
         } catch (error) {
             reject(error);
+        }
+    })
+}
+
+// xóa người dùng theo id
+let deleteUser = async (idUserDel) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let foundUser = await db.User.findOne({
+                where: { id: idUserDel }
+            })
+
+            if (foundUser) {
+                await db.User.destroy({
+                    where: {
+                        id: idUserDel
+                    },
+                });
+                resolve({
+                    errCode: 0,
+                    message: 'The user has been deleted'
+                })
+            } else {
+                resolve({
+                    errCode: 2,
+                    message: `The user isn't exist`
+                })
+            }
+
+        } catch (error) {
+            reject(error)
         }
     })
 }
