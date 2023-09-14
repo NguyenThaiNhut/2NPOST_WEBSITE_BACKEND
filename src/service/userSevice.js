@@ -19,20 +19,23 @@ let createNewUser = (userInput) => {
                     if (userInput.password) {
                         let hashPasswordFromBcrypt = await hashUserPassword(userInput.password)
                         await db.User.create({
-                            firstName: userInput.firstName,
-                            lastName: userInput.lastName,
+                            userName: userInput.userName,
                             birthday: userInput.birthday,
-                            genderId: userInput.genderId === 'M' ? true : false,
+                            keyGender: userInput.keyGender,
                             address: userInput.address,
+                            idDefaultLocation: userInput.idDefaultLocation,
+                            // image
                             email: userInput.email,
                             password: hashPasswordFromBcrypt,
                             phone: userInput.phone,
                             status: userInput.status,
-                            idRole: userInput.idRole,
+                            keyRole: userInput.keyRole,
+                            idTransporter: userInput.idTransporter,
+                            status: userInput.status,
                         })
 
                         let user = await db.User.findOne({
-                            where: { email: userInput.email },
+                            where: { phone: userInput.phone },
                             raw: true,
                         })
 
@@ -128,16 +131,16 @@ let getAllUsers = (userId) => {
 }
 
 //đăng nhập
-let handleUserLogin = (email, password) => {
+let handleUserLogin = (phone, password) => {
     return new Promise(async (resolve, reject) => {
         let userData = {};
 
         try {
-            let isExist = await checkUserEmail(email);
+            let isExist = await checkUserEmail(phone);
             if (isExist) {
                 let user = await db.User.findOne({
-                    // attributes: ['email', 'roleId', 'password'],
-                    where: { email: email, },
+                    // attributes: ['phone', 'roleId', 'password'],
+                    where: { phone: phone, },
                     raw: true,
                 })
 
@@ -182,12 +185,11 @@ let updateUser = (data) => {
                     raw: false,
                 })
                 if (user) {
-                    user.firstName = data.firstName;
-                    user.lastName = data.lastName;
+                    user.userName = data.userName;
                     user.birthday = data.birthday;
-                    user.genderId = data.genderId;
+                    user.keyGender = data.keyGender;
+                    user.email = data.email;
                     user.address = data.address;
-                    user.phone = data.phone;
 
                     await user.save();
 

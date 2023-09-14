@@ -10,11 +10,11 @@ let handleCreateNewUser = async (req, res) => {
 
 // đăng nhập
 let handleLogin = async (req, res) => {
-    let email = req.body.email;
+    let phone = req.body.phone;
     let password = req.body.password;
 
     // check email hoac pass rong?
-    if (!email || !password) {
+    if (!phone || !password) {
         return res.status(500).json({
             errCode: 1,
             message: 'Missing inputs parameter'
@@ -22,7 +22,7 @@ let handleLogin = async (req, res) => {
     }
 
     // check email ton tai? // check pass hop le?
-    let message = await userService.handleUserLogin(email, password);
+    let message = await userService.handleUserLogin(phone, password);
 
     return res.status(200).json(message)
 }
