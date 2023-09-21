@@ -12,9 +12,11 @@ let handleCreateNewUser = async (req, res) => {
 let handleLogin = async (req, res) => {
     let phone = req.body.phone;
     let password = req.body.password;
+    let keyRole = req.body.keyRole;
+    console.log(req.body)
 
     // check email hoac pass rong?
-    if (!phone || !password) {
+    if (!phone || !password || !keyRole) {
         return res.status(500).json({
             errCode: 1,
             message: 'Missing inputs parameter'
@@ -22,7 +24,7 @@ let handleLogin = async (req, res) => {
     }
 
     // check email ton tai? // check pass hop le?
-    let message = await userService.handleUserLogin(phone, password);
+    let message = await userService.handleUserLogin(phone, password, keyRole);
 
     return res.status(200).json(message)
 }

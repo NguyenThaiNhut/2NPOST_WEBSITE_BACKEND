@@ -8,12 +8,12 @@ const salt = bcrypt.genSaltSync(10);
 let createNewUser = (userInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (userInput.email) {
-                let check = await checkUserEmail(userInput.email);
+            if (userInput.phone) {
+                let check = await checkUserPhoneBykeyRole(userInput.phone, userInput.keyRole);
                 if (check) {
                     resolve({
                         errCode: 1,
-                        message: 'Your email is already exist, Please try another email'
+                        message: 'Your phone is already exist, Please try another phone'
                     })
                 } else {
                     if (userInput.password) {
@@ -57,7 +57,7 @@ let createNewUser = (userInput) => {
             } else {
                 resolve({
                     errCode: 2,
-                    message: 'Email not found',
+                    message: 'Phone not found',
                 })
             }
         } catch (error) {
@@ -66,13 +66,38 @@ let createNewUser = (userInput) => {
     })
 }
 
-// kiểm tra email đã tồn tại trong database hay chưa, trả về true nếu đã tồn tại, ngược lại là false
-let checkUserEmail = (userEmail) => {
+// kiểm tra phone đã tồn tại chưa, dựa vào ROLE, trả về true nếu phone này đã tạo role này rồi, false nếu phone này chưa tạo role
+// => dùng cho tạo tài khoản
+let checkUserPhoneBykeyRole = (userPhone, Role) => {
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
                 where: {
-                    email: userEmail
+                    phone: userPhone,
+                    keyRole: Role
+                }
+            })
+
+            if (user) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+// kiểm tra phone đã tồn tại trong database hay chưa, trả về true nếu đã tồn tại, ngược lại là false 
+// => dùng cho đăng nhập
+let checkUserPhone = (userPhone) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: {
+                    phone: userPhone,
                 }
             })
 
@@ -131,20 +156,25 @@ let getAllUsers = (userId) => {
 }
 
 //đăng nhập
-let handleUserLogin = (phone, password) => {
+let handleUserLogin = (phone, password, keyRole) => {
     return new Promise(async (resolve, reject) => {
         let userData = {};
 
         try {
-            let isExist = await checkUserEmail(phone);
+            let isExist = await checkUserPhoneBykeyRole(phone, keyRole);
+            console.log(isExist);
+
             if (isExist) {
                 let user = await db.User.findOne({
                     // attributes: ['phone', 'roleId', 'password'],
-                    where: { phone: phone, },
+                    where: {
+                        phone: phone,
+                        keyRole: keyRole
+                    },
+
                     raw: true,
                 })
-
-                // check email hop le?
+                // check phone hop le?
                 if (user) {
                     let check = bcrypt.compareSync(password, user.password);
                     // check pass hop le?
@@ -164,7 +194,7 @@ let handleUserLogin = (phone, password) => {
 
             } else {
                 userData.errCode = 2;
-                userData.message = `Your's email isn't exist in your system. Please try again`
+                userData.message = `Your's phone isn't exist in your system. Please try again`
             }
 
             resolve(userData);

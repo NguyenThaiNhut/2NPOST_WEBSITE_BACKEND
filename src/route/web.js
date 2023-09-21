@@ -1,5 +1,4 @@
 import express from "express";
-import homeController from "../controller/homeController"
 import multer from "multer";
 import path from "path";
 var appRoot = require('app-root-path');
@@ -32,7 +31,7 @@ let upload1 = multer({ storage: storage, fileFilter: imageFilter }).array('multi
 
 const initWebRoute = (app) => {
 
-    router.get('/', homeController.getHomePage);
+    // router.get('/', homeController.getHomePage);
     // router.get('/detail/user/:userId', homeController.getDetailPage);
     // router.post('/create-new-user', homeController.createNewUser);
     // router.post('/delete-user', homeController.deleteUser);
@@ -56,12 +55,12 @@ const initWebRoute = (app) => {
     //         }
     //     })
     // }, homeController.handleUploadMultipleFiles)
-    router.get('/crud', homeController.getCRUD);
-    router.post('/post-crud', homeController.postCRUD);
-    router.get('/display-get-crud', homeController.displayGetCRUD);
-    router.get('/edit-crud', homeController.getEditCRUD);
-    router.post('/put-crud', homeController.putCRUD);
-    router.get('/delete-crud', homeController.deleteCRUD);
+    // router.get('/crud', homeController.getCRUD);
+    // router.post('/post-crud', homeController.postCRUD);
+    // router.get('/display-get-crud', homeController.displayGetCRUD);
+    // router.get('/edit-crud', homeController.getEditCRUD);
+    // router.post('/put-crud', homeController.putCRUD);
+    // router.get('/delete-crud', homeController.deleteCRUD);
 
     return app.use('/', router)
 }

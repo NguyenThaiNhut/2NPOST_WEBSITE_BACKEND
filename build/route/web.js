@@ -62,12 +62,12 @@ var initWebRoute = function initWebRoute(app) {
   //         }
   //     })
   // }, homeController.handleUploadMultipleFiles)
-  router.get('/crud', _homeController["default"].getCRUD);
-  router.post('/post-crud', _homeController["default"].postCRUD);
-  router.get('/display-get-crud', _homeController["default"].displayGetCRUD);
-  router.get('/edit-crud', _homeController["default"].getEditCRUD);
-  router.post('/put-crud', _homeController["default"].putCRUD);
-  router.get('/delete-crud', _homeController["default"].deleteCRUD);
+  // router.get('/crud', _homeController["default"].getCRUD);
+  // router.post('/post-crud', _homeController["default"].postCRUD);
+  // router.get('/display-get-crud', _homeController["default"].displayGetCRUD);
+  // router.get('/edit-crud', _homeController["default"].getEditCRUD);
+  // router.post('/put-crud', _homeController["default"].putCRUD);
+  // router.get('/delete-crud', _homeController["default"].deleteCRUD);
   return app.use('/', router);
 };
 var _default = initWebRoute;
