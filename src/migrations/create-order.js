@@ -50,6 +50,9 @@ module.exports = {
       keyOrderStatus: {
         type: Sequelize.STRING
       },
+      totalCost: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -3,6 +3,7 @@ import express from "express";
 import userController from "../controller/userController";
 import customerController from "../controller/customerController";
 import TransporterController from '../controller/TransporterController';
+import costControler from '../controller/costController';
 
 let router = express.Router();
 
@@ -25,8 +26,10 @@ const initAPIRoute = (app) => {
     router.get('/transporter-get-order-status-by-key',
         TransporterController.handleGetOrderStatusByKey)//lấy trạng thái đơn hàng theo Key
 
-    // return app.use('/api/',
-    //     router)
+    // cost 
+    router.get('/get-cost-code', costControler.handleGetCostCode)
+
+    return app.use('/api/', router)
 }
 
 export default initAPIRoute;

@@ -36,7 +36,7 @@ let getOrderStatusByKey = (key) => {
 
             let orders = [];
             if (orderStatus === 'All') {
-                let orders[] = await db.Order.findAll({
+                let orders = await db.Order.findAll({
                     where: { idTransporter: idTransporter },
                     raw: true,
                 })
@@ -56,7 +56,6 @@ let getOrderStatusByKey = (key) => {
             reject(error);
         }
     })
-
 }
 
 module.exports = {

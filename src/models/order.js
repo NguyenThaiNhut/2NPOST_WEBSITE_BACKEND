@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     idSenderLocation: DataTypes.STRING,
     recieverLngLocation: DataTypes.STRING,
     recieverLatLocation: DataTypes.STRING,
-    keyOrderStatus: DataTypes.STRING
+    keyOrderStatus: DataTypes.STRING,
+    totalCost: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Order',
