@@ -29,25 +29,26 @@ let getOrdersByService = (orderStatus, idTransporter) => {
     })
 }
 
+// lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
 let getOrderStatusByKey = (key) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             let orders = [];
-            if (orderStatus === 'All') {
-                let orders = await db.Order.findAll({
-                    where: { idTransporter: idTransporter },
+            if (key === 'All') {
+                orders = await db.AllCode.findAll({
+                    where: {
+                        type: ['ORDER_STATUS', 'TRANSPORT_STATUS'],
+                    },
                     raw: true,
                 })
             }
 
             else {
-                orders = await db.Order.findAll({
-                    where: { keyOrderStatus: orderStatus, idTransporter: idTransporter },
+                orders = await db.AllCode.findOne({
+                    where: { key: key },
                     raw: true,
                 })
             }
-            console.log(orders)
             resolve(orders);
 
         }

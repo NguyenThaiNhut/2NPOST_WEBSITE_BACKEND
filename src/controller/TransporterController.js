@@ -20,10 +20,12 @@ let handleGetOrdersByService = async (req, res) => {
 
 }
 
+// lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
 let handleGetOrderStatusByKey = async (req, res) => {
     let key = req.query.key;
     try {
         let message = await TransporterService.getOrderStatusByKey(key);
+        console.log('message', message)
         return res.status(200).json(message)
     }
     catch (error) {
