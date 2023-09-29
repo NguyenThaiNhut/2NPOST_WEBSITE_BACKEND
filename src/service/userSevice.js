@@ -13,7 +13,7 @@ let createNewUser = (userInput) => {
                 if (check) {
                     resolve({
                         errCode: 1,
-                        message: 'Your phone is already exist, Please try another phone'
+                        message: 'Số điện thoại đã tồn tại, vui lòng nhập số điện thoại khác!!!'
                     })
                 } else {
                     if (userInput.password) {
@@ -49,14 +49,14 @@ let createNewUser = (userInput) => {
                     } else {
                         resolve({
                             errCode: 3,
-                            message: 'Password not found',
+                            message: 'Mật khẩu không được tìm thấy!!!',
                         })
                     }
                 }
             } else {
                 resolve({
                     errCode: 2,
-                    message: 'Phone not found',
+                    message: 'Số điện thoại không được tìm thấy!!!',
                 })
             }
         } catch (error) {
@@ -179,21 +179,21 @@ let handleUserLogin = (phone, password, keyRole) => {
                     // check pass hop le?
                     if (check) {
                         userData.errCode = 0;
-                        userData.message = 'Login successful';
+                        userData.message = 'Đăng nhập thành công!';
                         delete user.password;
                         userData.data = user;
                     } else {
                         userData.errCode = 4;
-                        userData.message = 'Password mismatch'
+                        userData.message = 'Mật khẩu sai!!!'
                     }
                 } else {
                     userData.errCode = 3;
-                    userData.message = `User's not found~`
+                    userData.message = `Người dùng không tồn tại!!!`
                 }
 
             } else {
                 userData.errCode = 2;
-                userData.message = `Your's phone isn't exist in your system. Please try again`
+                userData.message = `Số điện thoại của bạn không tồn tại trong hệ thống. Vui lòng thử lại!!!`
             }
 
             resolve(userData);
@@ -224,18 +224,18 @@ let updateUser = (data) => {
 
                     resolve({
                         errCode: 0,
-                        message: 'The user has been updated'
+                        message: 'Thông tin người dùng đã được cập nhật!'
                     })
                 } else {
                     resolve({
                         errCode: 1,
-                        message: `The user isn't exist`
+                        message: `Người dùng không tồn tại!!!`
                     })
                 }
             } else {
                 resolve({
                     errCode: 2,
-                    message: 'missing required parameter'
+                    message: 'Vui lòng nhập thông tin!!!'
                 })
             }
 
@@ -261,12 +261,12 @@ let deleteUser = async (idUserDel) => {
                 });
                 resolve({
                     errCode: 0,
-                    message: 'The user has been deleted'
+                    message: 'Người dùng đã được xóa!'
                 })
             } else {
                 resolve({
                     errCode: 2,
-                    message: `The user isn't exist`
+                    message: `Người dùng không tồn tại!!!`
                 })
             }
 
