@@ -5,7 +5,9 @@ let getCostCode = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let costList = [];
-            costList = await db.CostCode.findAll();
+            costList = await db.CostCode.findAll({
+                // where: { id: 2 },
+            });
           
             if (costList) {
                 resolve({

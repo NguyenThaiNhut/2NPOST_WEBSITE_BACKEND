@@ -3,7 +3,9 @@ import express from "express";
 import userController from "../controller/userController";
 import customerController from "../controller/customerController";
 import TransporterController from '../controller/TransporterController';
-import costControler from '../controller/costController';
+import costController from '../controller/costController';
+import allCodeController from '../controller/allCodeController';
+ 
 
 let router = express.Router();
 
@@ -27,7 +29,10 @@ const initAPIRoute = (app) => {
         TransporterController.handleGetOrderStatusByKey)//lấy trạng thái đơn hàng theo Key
 
     // cost 
-    router.get('/get-cost-code', costControler.handleGetCostCode)
+    router.get('/get-cost-code', costController.handleGetCostCode)
+
+    // allcode 
+    router.post('/get-all-code', allCodeController.handleGetAllCode)// lấy thông tin AllCode theo 'type' 
 
     return app.use('/api/', router)
 }

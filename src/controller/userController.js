@@ -3,8 +3,9 @@ import userService from '../service/userSevice'
 //tạo mới người dùng 
 let handleCreateNewUser = async (req, res) => {
     let userInput = req.body;
+    console.log(userInput);
+    
     let message = await userService.createNewUser(userInput);
-
     return res.status(200).json(message)
 }
 
@@ -17,7 +18,7 @@ let handleLogin = async (req, res) => {
 
     // check email hoac pass rong?
     if (!phone || !password || !keyRole) {
-        return res.status(500).json({
+        return res.status(200).json({
             errCode: 1,
             message: 'Missing inputs parameter'
         })

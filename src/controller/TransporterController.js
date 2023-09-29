@@ -11,7 +11,7 @@ let handleGetOrdersByService = async (req, res) => {
 
     }
     catch (error) {
-        return res.status(500).json({
+        return res.status(200).json({
             error: 1,
             message: 'Missing required params'
         })
@@ -27,7 +27,7 @@ let handleGetOrderStatusByKey = async (req, res) => {
         return res.status(200).json(message)
     }
     catch (error) {
-        return res.status(500).json({
+        return res.status(200).json({
             error: 1,
             message: 'Missing required params'
         })
