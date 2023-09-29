@@ -5,7 +5,7 @@ import customerController from "../controller/customerController";
 import TransporterController from '../controller/TransporterController';
 import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
- 
+
 
 let router = express.Router();
 
@@ -20,7 +20,7 @@ const initAPIRoute = (app) => {
   //customer
   router.post("/customer-create-order",
     customerController.handleCreateNewOrderByCustomer
-  ); // tạo đơn hàng
+  );
 
   // transporter
   router.get("/transporter-get-order-by-status",

@@ -31,7 +31,6 @@ let createNewUser = (userInput) => {
                             status: userInput.status,
                             keyRole: userInput.keyRole,
                             idTransporter: userInput.idTransporter,
-                            status: userInput.status,
                         })
 
                         let user = await db.User.findOne({
@@ -182,7 +181,7 @@ let handleUserLogin = (phone, password, keyRole) => {
                         userData.errCode = 0;
                         userData.message = 'Login successful';
                         delete user.password;
-                        userData.user = user;
+                        userData.data = user;
                     } else {
                         userData.errCode = 4;
                         userData.message = 'Password mismatch'
