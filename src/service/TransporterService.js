@@ -27,7 +27,6 @@ let getOrdersByService = (orderStatus, idTransporter) => {
             reject(error);
         }
     })
-
 }
 
 let getOrderStatusByKey = (key) => {
