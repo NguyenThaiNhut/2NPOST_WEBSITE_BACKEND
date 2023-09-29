@@ -50,7 +50,6 @@ let getOrderStatusByKey = (key) => {
                     raw: true,
                 })
             }
-            console.log(orders)
             resolve(orders);
 
         }
