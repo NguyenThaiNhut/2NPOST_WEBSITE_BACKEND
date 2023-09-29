@@ -6,7 +6,6 @@ import TransporterController from '../controller/TransporterController';
 import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
  
-
 let router = express.Router();
 
 const initAPIRoute = (app) => {

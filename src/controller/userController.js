@@ -20,7 +20,7 @@ let handleLogin = async (req, res) => {
     if (!phone || !password || !keyRole) {
         return res.status(200).json({
             errCode: 1,
-            message: 'Missing inputs parameter'
+            message: 'Vui lòng nhập thông tin!!!'
         })
     }
 
@@ -58,7 +58,7 @@ let handleDeleteUser = async (req, res) => {
     if (!id) {
         return res.status(200).json({
             errCode: 1,
-            message: 'Missing required parameter!'
+            message: 'Vui lòng nhập thông tin!!!'
         })
     }
 

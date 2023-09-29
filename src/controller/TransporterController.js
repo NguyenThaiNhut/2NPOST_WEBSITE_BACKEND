@@ -13,7 +13,7 @@ let handleGetOrdersByService = async (req, res) => {
     catch (error) {
         return res.status(200).json({
             error: 1,
-            message: 'Missing required params'
+            message: 'Vui lòng nhập thông tin!!!'
         })
 
     }
@@ -31,7 +31,7 @@ let handleGetOrderStatusByKey = async (req, res) => {
     catch (error) {
         return res.status(200).json({
             error: 1,
-            message: 'Missing required params'
+            message: 'Vui lòng nhập thông tin!!!'
         })
 
     }
