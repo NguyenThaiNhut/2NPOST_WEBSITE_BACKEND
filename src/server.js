@@ -27,7 +27,7 @@ app.use(express.json()) // To parse the incoming requests with JSON payloads
 
 configViewEngine(app);
 
-initWebRoute(app);
+// initWebRoute(app);
 
 //viet api
 initAPIRoute(app);

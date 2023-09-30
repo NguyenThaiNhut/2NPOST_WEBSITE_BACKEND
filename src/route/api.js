@@ -6,7 +6,35 @@ import TransporterController from '../controller/TransporterController';
 import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
 
+import multer from "multer";
+import path from "path";
+var appRoot = require('app-root-path');
+ 
 let router = express.Router();
+
+// middleware multer -  xử lý upload ảnh
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      // console.log('>>> check app root: ', appRoot);
+      cb(null, appRoot + '/src/public/image/');
+  },
+
+  // By default, multer removes file extensions so let's add them back
+  filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const imageFilter = function (req, file, cb) {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+      req.fileValidationError = 'Only image files are allowed!';
+      return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+
+let upload = multer({ storage: storage, fileFilter: imageFilter })
 
 const initAPIRoute = (app) => {
   //user
@@ -34,6 +62,13 @@ const initAPIRoute = (app) => {
 
   // allcode 
   router.post('/get-all-code', allCodeController.handleGetAllCode)// lấy thông tin AllCode theo 'type' 
+
+  //upload image
+  router.get('/upload', (req, res) => {
+    res.render('uploadFile.ejs');
+  });
+
+  router.post('/upload-profile-pic', upload.single('profile_pic'), userController.handleUploadFile);
 
   return app.use('/api/', router)
 }
