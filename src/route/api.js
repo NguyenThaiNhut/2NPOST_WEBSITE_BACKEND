@@ -26,6 +26,8 @@ const initAPIRoute = (app) => {
     TransporterController.handleGetOrdersByService); // lấy đơn hàng theo trạng thái
   router.get('/transporter-get-order-status-by-key',
     TransporterController.handleGetOrderStatusByKey)//lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
+  router.post('/transporter-create-account',
+    TransporterController.handleCreateAccountTransporter)
 
   // cost 
   router.get('/get-cost-code', costController.handleGetCostCode)
