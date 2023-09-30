@@ -4,7 +4,6 @@ import TransporterService from '../service/TransporterService';
 let handleGetOrdersByService = async (req, res) => {
     let orderStatus = req.query.keyOrderStatus;
     let idTransporter = req.query.idTransporter;
-    console.log(req.body)
     try {
         let message = await TransporterService.getOrdersByService(orderStatus, idTransporter);
         return res.status(200).json(message)
@@ -25,7 +24,23 @@ let handleGetOrderStatusByKey = async (req, res) => {
     let key = req.query.key;
     try {
         let message = await TransporterService.getOrderStatusByKey(key);
-        console.log('message', message)
+        return res.status(200).json(message)
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+
+    }
+
+}
+
+let handleCreateAccountTransporter = async (req, res) => {
+    let transporterInput = req.body.transporter;
+    let userInput = req.body.user;
+    try {
+        let message = await TransporterService.CreateAccountTransporter(transporterInput, userInput);
         return res.status(200).json(message)
     }
     catch (error) {
@@ -40,5 +55,6 @@ let handleGetOrderStatusByKey = async (req, res) => {
 
 module.exports = {
     handleGetOrdersByService,
-    handleGetOrderStatusByKey
+    handleGetOrderStatusByKey,
+    handleCreateAccountTransporter
 }

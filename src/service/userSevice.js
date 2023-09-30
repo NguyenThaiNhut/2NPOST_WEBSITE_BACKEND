@@ -282,4 +282,6 @@ module.exports = {
     createNewUser,
     deleteUser,
     updateUser,
+    checkUserPhoneBykeyRole,
+    hashUserPassword
 }
