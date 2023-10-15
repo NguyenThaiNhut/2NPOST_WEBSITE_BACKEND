@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Vehicle.init({
+    image: DataTypes.STRING,
     type: DataTypes.STRING,
     weight: DataTypes.STRING,
     licensePlates: DataTypes.STRING,

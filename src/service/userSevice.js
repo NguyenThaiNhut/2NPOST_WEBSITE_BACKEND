@@ -219,6 +219,7 @@ let updateUser = (data) => {
                     user.keyGender = data.keyGender;
                     user.email = data.email;
                     user.address = data.address;
+                    user.image = data.image;
 
                     await user.save();
 

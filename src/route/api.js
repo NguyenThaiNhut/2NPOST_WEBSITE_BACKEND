@@ -5,6 +5,7 @@ import customerController from "../controller/customerController";
 import TransporterController from '../controller/TransporterController';
 import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
+import locationController from '../controller/locationController';
 
 import multer from "multer";
 import path from "path";
@@ -61,7 +62,7 @@ const initAPIRoute = (app) => {
   router.get('/get-cost-code', costController.handleGetCostCode)
 
   // allcode 
-  router.post('/get-all-code', allCodeController.handleGetAllCode)// lấy thông tin AllCode theo 'type' 
+  router.get('/get-all-code', allCodeController.handleGetAllCode)// lấy thông tin AllCode theo 'type' 
 
   //upload image
   router.get('/upload', (req, res) => {
@@ -69,6 +70,9 @@ const initAPIRoute = (app) => {
   });
 
   router.post('/upload-profile-pic', upload.single('profile_pic'), userController.handleUploadFile);
+
+  //thêm tọa độ người dùng vào bảng LocationUser
+  router.post("/create-new-location", locationController.handleCreateNewLocation); //tạo mới người dùng
 
   return app.use('/api/', router)
 }

@@ -2,7 +2,7 @@ import allCodeService from '../service/allCodeService';
 
 // lấy thông tin AllCode theo 'type'  - trung gian
 let handleGetAllCode = async (req, res) => {
-    let { type } = req.body;
+    let { type } = req.query;
 
     let message = await allCodeService.getAllCode(type);
 
