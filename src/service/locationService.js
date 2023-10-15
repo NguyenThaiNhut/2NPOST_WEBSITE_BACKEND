@@ -52,6 +52,52 @@ let createNewUserLocation = (userLocationInput) => {
     })
 }
 
+//lấy tất cả tọa độ theo người dùng trong data
+let getAllUserLocation = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userCoordinates = [];
+            if(userId){
+                let checkIdUser = await checkUserId(userId);
+                if(checkIdUser){
+                    userCoordinates = await db.UserLocation.findAll({
+                        where: {
+                            idUser: userId,
+                        },
+                    })
+                    if(userCoordinates){
+                        resolve({
+                            errCode: 0,
+                            message: 'OK!!!',
+                            data: userCoordinates,
+                        })
+                    } else {
+                        resolve({
+                            errCode: 0,
+                            message: 'OK!!!',
+                            data: [],
+                        })
+                    }
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: 'ID người dùng không tồn tại!!!'
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: 'Vui lòng nhập ID người dùng!!!',
+                })
+            }
+            
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 //kiểm tra tọa độ (theo từng người dùng) đã tồn tại trong hệ thống hay chưa?
 let checkLocationInput = (lat, lng, idUser) => {
     return new Promise(async (resolve, reject) => {
@@ -100,4 +146,5 @@ let checkUserId = (idUser) => {
 
 module.exports = {
     createNewUserLocation,
+    getAllUserLocation,
 }

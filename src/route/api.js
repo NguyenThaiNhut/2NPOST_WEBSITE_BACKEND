@@ -87,6 +87,7 @@ const initAPIRoute = (app) => {
 
   //thêm tọa độ người dùng vào bảng LocationUser
   router.post("/create-new-location", locationController.handleCreateNewLocation); //tạo mới người dùng
+  router.get("/get-all-user-location", locationController.handleGetAllUserLocation); //lấy tất cả tọa độ theo người dùng trong data 
 
   return app.use('/api/', router)
 }

@@ -9,6 +9,15 @@ let handleCreateNewLocation = async (req, res) => {
     return res.status(200).json(message)
 }
 
+//lấy tất cả tọa độ theo người dùng trong data
+let handleGetAllUserLocation = async (req, res) => {
+    let idUser = req.query.id; //all , id
+    
+    let message = await locationService.getAllUserLocation(idUser);
+    return res.status(200).json(message)
+}
+
 module.exports = {
     handleCreateNewLocation,
+    handleGetAllUserLocation,
 }
