@@ -9,7 +9,6 @@ let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // console.log('>>> check app root: ', appRoot);
         cb(null, appRoot + '/src/public/image/');
     },
 

@@ -1,4 +1,6 @@
 import db from '../models/index';
+import fs from "fs";
+import path from "path";
 
 import bcrypt from 'bcryptjs';
 
@@ -40,7 +42,6 @@ let createNewUser = (userInput) => {
 
                         delete user.password
 
-                        console.log('check user: ', user)
                         resolve({
                             errCode: 0,
                             message: 'OK',
@@ -161,7 +162,6 @@ let handleUserLogin = (phone, password, keyRole) => {
 
         try {
             let isExist = await checkUserPhoneBykeyRole(phone, keyRole);
-            console.log(isExist);
 
             if (isExist) {
                 let user = await db.User.findOne({
@@ -277,6 +277,28 @@ let deleteUser = async (idUserDel) => {
     })
 }
 
+let removeFileService = async (fileName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const directoryPath = path.join(__dirname, "../public");
+            fs.unlink(directoryPath + fileName, (err) => {
+                if (err) {
+                    resolve({
+                        message: "Could not delete the file. " + err,
+                    });
+                }
+
+                resolve({
+                    message: "File is deleted.",
+                });
+            });
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     handleUserLogin,
     getAllUsers,
@@ -284,5 +306,6 @@ module.exports = {
     deleteUser,
     updateUser,
     checkUserPhoneBykeyRole,
-    hashUserPassword
+    hashUserPassword,
+    removeFileService,
 }

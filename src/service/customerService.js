@@ -44,7 +44,6 @@ let createNewOrderByCustomer = (orderInput) => {
 
     //                     delete user.password
 
-    //                     console.log('check user: ', user)
     //                     resolve({
     //                         errCode: 0,
     //                         message: 'OK',
