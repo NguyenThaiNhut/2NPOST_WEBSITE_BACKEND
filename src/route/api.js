@@ -54,27 +54,33 @@ const initAPIRoute = (app) => {
   router.get("/transporter-get-order-by-status",
     TransporterController.handleGetOrdersByService); // lấy đơn hàng theo trạng thái
   router.get('/transporter-get-order-status-by-key',
-    TransporterController.handleGetOrderStatusByKey)//lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
+    TransporterController.handleGetOrderStatusByKey);//lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
   router.post('/transporter-create-account',
-    TransporterController.handleCreateAccountTransporter) //tạo tài khoản transporter
+    TransporterController.handleCreateAccountTransporter); //tạo tài khoản transporter
   router.get('/transporter-get-transporter-by-id-user',
-    TransporterController.handleGetTransporterByIdUser) //lấy TT transporter dựa vào id.user
+    TransporterController.handleGetTransporterByIdUser); //lấy TT transporter dựa vào id.user
   router.get('/transporter-get-weight-by-vehicle',
-    TransporterController.handleGetWeightByVehicle) //lấy weight by vehicle
+    TransporterController.handleGetWeightByVehicle); //lấy weight by vehicle
   router.post('/transporter-create-vehicle',
-    TransporterController.handleCreateVehicle) //tạo phương tiện
+    TransporterController.handleCreateVehicle); //tạo phương tiện
   router.get('/transporter-get-vehicle-by-idTransporter',
-    TransporterController.handleGetVehicleByIdTransporter) //lấy phương tiện theo idTransporter
+    TransporterController.handleGetVehicleByIdTransporter); //lấy phương tiện theo idTransporter
   router.delete("/transporter-delete-vehicle",
     TransporterController.handleDeleteVehicle); // xóa phương tiện theo id
   router.put("/transporter-edit-vehicle",
     TransporterController.handleEditVehicle); // chỉnh sửa thông tin phương tiện
-
+  router.get("/transporter-get-service-of-transporter",
+    TransporterController.handleGetServiceOfTransporter); // lấy dịch vụ của transporter
+  router.get("/transporter-get-scope-of-transporter",
+    TransporterController.handleGetScopeOfTransporter); // lấy phạm vi của transporter
+  // router.put("/transporter-edit-info-transporter",
+  //   TransporterController.handleEditInfoTrans); // chỉnh sửa thông tin nvc
   // cost 
-  router.get('/get-cost-code', costController.handleGetCostCode)
+  router.get('/get-cost-code', costController.handleGetCostCode);
 
   // allcode 
-  router.get('/get-all-code', allCodeController.handleGetAllCode)// lấy thông tin AllCode theo 'type' 
+  router.get('/get-all-code', allCodeController.handleGetAllCode);// lấy thông tin AllCode theo 'type'
+  router.get('/get-all-code-by-key', allCodeController.handleGetAllCodeByKey);// lấy thông tin AllCode theo 'key'
 
   //upload image
   router.get('/upload', (req, res) => {
@@ -94,7 +100,7 @@ const initAPIRoute = (app) => {
   // order
   router.post("/create-new-order", orderController.handleCreateNewOrder); // tạo mới đơn hàng người dùng 
 
-  return app.use('/api/', router)
+  return app.use('/api/', router);
 }
 
 export default initAPIRoute;

@@ -10,7 +10,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Transporter, {
+        foreignKey: 'idTransporter',
+        as: 'Transporter',
+      });
+
+      this.belongsTo(models.AllCode, {
+        foreignKey: 'keyService',
+        targetKey: 'key',
+        as: 'AllCode',
+      });
     }
   };
   ServiceOfTransporter.init({
@@ -19,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'ServiceOfTransporter',
-  });
+  }
+  );
   return ServiceOfTransporter;
 };
