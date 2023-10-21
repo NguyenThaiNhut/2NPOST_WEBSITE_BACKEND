@@ -1,6 +1,8 @@
 import db from '../models/index';
 import { Op } from 'sequelize';
 import { checkUserPhoneBykeyRole, hashUserPassword, removeFileService } from './userSevice'
+import { createNewUserLocation } from './locationService'
+import sequelize from 'sequelize';
 
 // lấy tất cả đơn hàng theo trạng thái(order-status) của NVC(idTransporter);
 let getOrdersByService = (orderStatus, idTransporter) => {
@@ -73,7 +75,7 @@ let CreateAccountTransporter = (transporterInput, userInput) => {
                 let transporterNew = await db.Transporter.create({
                     transporterName: transporterInput.transporterName,
                     foundingDate: transporterInput.foundingDate,
-                    status: 1,
+                    status: 0, // tài khoản vừa tạo có trạng thái bằng 0
                 })
 
                 if (transporterNew) {
@@ -363,6 +365,110 @@ let editVehicle = (vehicleEdit) => {
     })
 }
 
+//lấy phương tiện theo idTransporter
+let GetServiceOfTransporter = (idTransporter) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let serviceofTrans = await db.ServiceOfTransporter.findAll({
+                include: [
+                    {
+                        model: db.AllCode,
+                        as: 'AllCode', // Đặt tên cho mối quan hệ
+                    },
+                ],
+                where: {
+                    idTransporter,
+                },
+                raw: false,
+            });
+
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                data: serviceofTrans,
+            })
+        }
+
+        catch (error) {
+            console.log(error)
+            reject(error);
+        }
+    })
+}
+
+//lấy phạm vi theo idTransporter
+let GetScopeOfTransporter = (idTransporter) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let scopeOfTrans = await db.ScopeOfTransporter.findAll({
+                include: [
+                    {
+                        model: db.AllCode,
+                        as: 'AllCodeScope', // Đặt tên cho mối quan hệ
+                    },
+                ],
+                where: {
+                    idTransporter,
+                },
+                raw: false,
+            });
+
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                data: scopeOfTrans,
+            })
+        }
+
+        catch (error) {
+            console.log(error)
+            reject(error);
+        }
+    })
+}
+
+//chỉnh sửa thông tin nhà vận chuyển
+// let editInfoTrans = (transporterEdit) => {
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             console.log('transporterEdit', transporterEdit)
+//             if (transporterEdit.id) {
+//                 let user = await db.User.findOne({
+//                     where: { id: data.id },
+//                     raw: false,
+//                 })
+//                 if (user) {
+//                     user.email = transporterEdit.email;
+//                     user.address = transporterEdit.address;
+//                     await user.save();
+//                     // resolve({
+//                     //     errCode: 0,
+//                     //     message: 'Thông tin người dùng đã được cập nhật!'
+//                     // })
+//                     let user = await db.User.findOne({
+//                         where: { id: data.id },
+//                         raw: false,
+//                     })
+//                 } else {
+//                     resolve({
+//                         errCode: 1,
+//                         message: `Người dùng không tồn tại!!!`
+//                     })
+//                 }
+//             } else {
+//                 resolve({
+//                     errCode: 2,
+//                     message: 'Vui lòng nhập thông tin!!!'
+//                 })
+//             }
+//         }
+
+//         catch (error) {
+//             reject(error);
+//         }
+//     })
+// }
+
 module.exports = {
     getOrdersByService,
     getOrderStatusByKey,
@@ -372,5 +478,8 @@ module.exports = {
     CreateVehicle,
     GetVehicleByIdTransporter,
     deleteVehicle,
-    editVehicle
+    editVehicle,
+    GetServiceOfTransporter,
+    GetScopeOfTransporter,
+    // editInfoTrans
 }

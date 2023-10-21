@@ -142,6 +142,49 @@ let handleEditVehicle = async (req, res) => {
     let message = await TransporterService.editVehicle(vehicleEdit);
     return res.status(200).json(message)
 }
+
+// lấy dịch vụ của transporter
+let handleGetServiceOfTransporter = async (req, res) => {
+    let idTransporter = req.query.idTransporter;
+    try {
+        let message = await TransporterService.GetServiceOfTransporter(idTransporter);
+        return res.status(200).json(message)
+
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+
+    }
+
+}
+
+// lấy phạm vi của transporter
+let handleGetScopeOfTransporter = async (req, res) => {
+    let idTransporter = req.query.idTransporter;
+    try {
+        let message = await TransporterService.GetScopeOfTransporter(idTransporter);
+        return res.status(200).json(message)
+
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+
+    }
+
+}
+//chỉnh sửa thông tin nhà vận chuyển
+// let handleEditInfoTrans = async (req, res) => {
+//     let transporterEdit = req.body.transporterEdit;
+//     let message = await TransporterService.editInfoTrans(transporterEdit);
+//     return res.status(200).json(message)
+// }
+
 module.exports = {
     handleGetOrdersByService,
     handleGetOrderStatusByKey,
@@ -151,5 +194,8 @@ module.exports = {
     handleCreateVehicle,
     handleGetVehicleByIdTransporter,
     handleDeleteVehicle,
-    handleEditVehicle
+    handleEditVehicle,
+    handleGetServiceOfTransporter,
+    handleGetScopeOfTransporter,
+    // handleEditInfoTrans
 }
