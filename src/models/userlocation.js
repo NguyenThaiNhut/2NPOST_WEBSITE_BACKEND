@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   UserLocation.init({
     lng: DataTypes.STRING,
     lat: DataTypes.STRING,
-    idUser: DataTypes.STRING
+    idUser: DataTypes.STRING,
+    detailAddress: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'UserLocation',

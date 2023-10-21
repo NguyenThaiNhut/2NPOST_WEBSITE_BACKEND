@@ -220,6 +220,7 @@ let updateUser = (data) => {
                     user.email = data.email;
                     user.address = data.address;
                     user.image = data.image;
+                    user.idDefaultLocation = data.idDefaultLocation;
 
                     await user.save();
 

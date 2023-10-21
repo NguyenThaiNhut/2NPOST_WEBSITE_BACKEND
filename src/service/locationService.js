@@ -4,8 +4,8 @@ import db from '../models/index';
 let createNewUserLocation = (userLocationInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let {lat, lng, idUser} = userLocationInput;
-            console.log('check', lat, lng, idUser);
+            let {lat, lng, idUser, detailAddress} = userLocationInput;
+            console.log('check', lat, lng, idUser, detailAddress);
             
             if (lat && lng && idUser) {
                 let checkIdUser = await checkUserId(idUser);
@@ -26,6 +26,7 @@ let createNewUserLocation = (userLocationInput) => {
                             lat: lat,
                             lng: lng,
                             idUser: idUser,
+                            detailAddress: detailAddress,
                         })
 
                         let userLocation = await db.UserLocation.findOne({
@@ -90,8 +91,6 @@ let getAllUserLocation = (userId) => {
                     message: 'Vui lòng nhập ID người dùng!!!',
                 })
             }
-            
-
         } catch (error) {
             reject(error);
         }
@@ -144,7 +143,39 @@ let checkUserId = (idUser) => {
     })
 }
 
+// xóa người dùng theo id
+let deleteUserLocation = async (idUserLocationDel) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let foundUserLocation = await db.UserLocation.findOne({
+                where: { id: idUserLocationDel }
+            })
+
+            if (foundUserLocation) {
+                await db.UserLocation.destroy({
+                    where: {
+                        id: idUserLocationDel
+                    },
+                });
+                resolve({
+                    errCode: 0,
+                    message: 'Địa chỉ người dùng đã được xóa!'
+                })
+            } else {
+                resolve({
+                    errCode: 2,
+                    message: `Địa chỉ người dùng không tồn tại!!!`
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     createNewUserLocation,
     getAllUserLocation,
+    deleteUserLocation,
 }

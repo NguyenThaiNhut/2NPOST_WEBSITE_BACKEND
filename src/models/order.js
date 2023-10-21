@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     /**
@@ -11,17 +12,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.User, {
+        foreignKey: 'idCustomer',
+        as: 'User',
+      });
+      
+      this.belongsTo(models.AllCode, {
+        foreignKey: 'keyService',
+        targetKey: 'key',
+        as: 'keyServiceAllCode',
+      });
+
+      this.belongsTo(models.AllCode, {
+        foreignKey: 'keyOrderStatus',
+        targetKey: 'key',
+        as: 'keyOrderStatusAllCode',
+      });
     }
   };
+
   Order.init({
     idCustomer: DataTypes.STRING,
+    image: DataTypes.STRING,
     senderName: DataTypes.STRING,
     senderPhone: DataTypes.STRING,
     senderAddress: DataTypes.STRING,
     recieverName: DataTypes.STRING,
     recieverPhone: DataTypes.STRING,
     recieverAddress: DataTypes.STRING,
-    typeOrder: DataTypes.INTEGER,
+    typeOrder: DataTypes.INTEGER, // loại "0": hệ thống tự động gợi ý nhà vận chuyển , loại "1" tự lựa chọn nhà vận chuyển
     idTransporter: DataTypes.STRING,
     keyService: DataTypes.STRING,
     idSenderLocation: DataTypes.STRING,

@@ -6,6 +6,7 @@ import TransporterController from '../controller/TransporterController';
 import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
 import locationController from '../controller/locationController';
+import orderController from '../controller/orderController';
 
 import multer from "multer";
 import path from "path";
@@ -88,6 +89,10 @@ const initAPIRoute = (app) => {
   //thêm tọa độ người dùng vào bảng LocationUser
   router.post("/create-new-location", locationController.handleCreateNewLocation); //tạo mới người dùng
   router.get("/get-all-user-location", locationController.handleGetAllUserLocation); //lấy tất cả tọa độ theo người dùng trong data 
+  router.delete("/delete-user-location", locationController.handleDeleteUserLocation); // xóa tọa độ người dùng theo id
+
+  // order
+  router.post("/create-new-order", orderController.handleCreateNewOrder); // tạo mới đơn hàng người dùng 
 
   return app.use('/api/', router)
 }
