@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idCustomer',
         as: 'User',
       });
-      
+
       this.belongsTo(models.AllCode, {
         foreignKey: 'keyService',
         targetKey: 'key',
@@ -47,7 +47,8 @@ module.exports = (sequelize, DataTypes) => {
     recieverLngLocation: DataTypes.STRING,
     recieverLatLocation: DataTypes.STRING,
     keyOrderStatus: DataTypes.STRING,
-    totalCost: DataTypes.STRING
+    totalCost: DataTypes.STRING,
+    note: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Order',
