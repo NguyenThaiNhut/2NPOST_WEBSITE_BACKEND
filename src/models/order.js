@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.User, {
         foreignKey: 'idCustomer',
-        as: 'User',
+        as: 'user',
       });
 
       this.belongsTo(models.AllCode, {
@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'keyOrderStatus',
         targetKey: 'key',
         as: 'keyOrderStatusAllCode',
+      });
+
+      this.belongsTo(models.UserLocation, { // định nghĩa id tọa độ người gửi
+        foreignKey: 'idSenderLocation',
+        as: 'senderLocation',
       });
     }
   };
@@ -48,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     recieverLatLocation: DataTypes.STRING,
     keyOrderStatus: DataTypes.STRING,
     totalCost: DataTypes.STRING,
-    note: DataTypes.STRING
+    note: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Order',

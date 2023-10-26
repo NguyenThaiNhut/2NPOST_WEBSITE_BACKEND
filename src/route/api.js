@@ -7,6 +7,8 @@ import costController from '../controller/costController';
 import allCodeController from '../controller/allCodeController';
 import locationController from '../controller/locationController';
 import orderController from '../controller/orderController';
+import goodsController from '../controller/goodsController';
+import typeOfGoodsController from '../controller/typeOfGoodsController';
 
 import multer from "multer";
 import path from "path";
@@ -125,6 +127,14 @@ const initAPIRoute = (app) => {
 
   // order
   router.post("/create-new-order", orderController.handleCreateNewOrder); // tạo mới đơn hàng người dùng 
+  router.get("/get-all-order-info", orderController.handleGetAllOrderInfo); //lấy tất cả thông tin đơn hàng theo id đơn hàng
+  router.get("/get-all-order-by-id-customer", orderController.handleGetAllOrderByIdCustomer); //lấy tất cả đơn hàng theo id của khách hàng
+
+  // goods
+  router.post("/create-new-goods", goodsController.handleCreateNewGoods); // tạo mới sản phẩm trong đơn hàng
+
+  // typeOfGoods
+  router.post("/create-new-type-of-goods", typeOfGoodsController.handleCreateNewTypeOfGoods); // tạo mới tính chất hàng hóa trong đơn hàng
 
   return app.use('/api/', router);
 }
