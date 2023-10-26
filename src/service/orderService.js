@@ -27,6 +27,13 @@ let getTypeOfGoodsByOrder = (idOrder) => {
             if(checkOrder){
                 let typeOfGoods = await db.TypeOfGoodsByOrder.findAll({
                     where: { idOrder: idOrder },
+                    include: [
+                        {
+                            model: db.AllCode, // dịch vụ của đơn hàng
+                            as: 'keyTypeOfGoodsAllCode', // Đặt tên cho mối quan hệ
+                        },
+                    ],
+                    raw: false
                 })
                 if(typeOfGoods){
                     resolve({
@@ -38,6 +45,48 @@ let getTypeOfGoodsByOrder = (idOrder) => {
                     resolve({
                         errCode: 0,
                         message: `Lấy tất cả loại hàng hóa theo đơn hàng thành công!!!`,
+                        data: [],
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Đơn hàng không tồn tại!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
+//lấy hàng hóa theo id đơn hàng, (laptop, điện thoại, bàn ghế, tủ lạnh,...)
+let getGoodsByOrder = (idOrder) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkOrder = await checkOrderExists(idOrder);
+            if(checkOrder){
+                let goods = await db.Goods.findAll({
+                    where: { idOrder: idOrder },
+                    // include: [
+                    //     {
+                    //         model: db.AllCode, // dịch vụ của đơn hàng
+                    //         as: 'keyTypeOfGoodsAllCode', // Đặt tên cho mối quan hệ
+                    //     },
+                    // ],
+                    // raw: false
+                })
+                if(goods){
+                    resolve({
+                        errCode: 0,
+                        message: `Lấy tất cả hàng hóa theo đơn hàng thành công!!!`,
+                        data: goods,
+                    })
+                } else {
+                    resolve({
+                        errCode: 0,
+                        message: `Lấy tất cả hàng hóa theo đơn hàng thành công!!!`,
                         data: [],
                     })
                 }
@@ -73,15 +122,16 @@ let checkUserExists = (idUser) => {
 } 
 
 //lấy thông tin đơn hàng theo id đơn hàng - (chưa code xong)
-let getAllOrderInfoByIdOrder = () => {
+let getAllOrderInfoByIdOrder = (idOrder) => {
     return new Promise(async (resolve, reject) => {
         try {
             let order = await db.Order.findOne({
-                where: { id: 3 },
+                where: { id: idOrder },
                 include: [
                     {
                         model: db.User, // thông tin khách hàng
-                        as: 'User', // Đặt tên cho mối quan hệ
+                        as: 'user', // Đặt tên cho mối quan hệ
+                        attributes: { exclude: ['password'] }
                     },
                     {
                         model: db.AllCode, // dịch vụ của đơn hàng
@@ -90,19 +140,33 @@ let getAllOrderInfoByIdOrder = () => {
                     {
                         model: db.AllCode, // trạng thái của đơn hàng
                         as: 'keyOrderStatusAllCode', // Đặt tên cho mối quan hệ
-                    }
+                    },
+                    {
+                        model: db.UserLocation, // tọa độ người gửi
+                        as: 'senderLocation', // Đặt tên cho mối quan hệ
+                    },
                 ],
                 raw: false,
             })
             
             if(order){
-                let typeOfGoods = await getTypeOfGoodsByOrder(3);
+                let typeOfGoods = await getTypeOfGoodsByOrder(idOrder);
                 console.log('check: ', typeOfGoods);
                 if(typeOfGoods.errCode == 0){
                     if(typeOfGoods.data.length > 0){
                         order.setDataValue('typeOfGoods', typeOfGoods.data);
                     } else {
                         order.setDataValue('typeOfGoods', []);
+                    }
+                }
+
+                let goods = await getGoodsByOrder(idOrder);
+                console.log('check: ', goods);
+                if(goods.errCode == 0){
+                    if(goods.data.length > 0){
+                        order.setDataValue('goods', goods.data);
+                    } else {
+                        order.setDataValue('goods', []);
                     }
                 }
                 
@@ -113,6 +177,11 @@ let getAllOrderInfoByIdOrder = () => {
                     data: order,
                 })
                 
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Đơn hàng không tồn tại!!!`,
+                })
             }
         } catch (error) {
             reject(error);
@@ -143,6 +212,7 @@ let createNewOrder = (orderInput) => {
                     recieverLatLocation: orderInput.recieverLatLocation,
                     keyOrderStatus: orderInput.keyOrderStatus,
                     totalCost: orderInput.totalCost,
+                    note: orderInput.note,
                 })
 
                 console.log('thong tin don hang da duoc tao: ', order);
@@ -164,6 +234,43 @@ let createNewOrder = (orderInput) => {
     })
 }
 
+//lấy tất cả đơn hàng theo id của khách hàng
+let getAllOrderByIdCustomer = (idUser) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkUserExistsValue = await checkUserExists(idUser);
+            if(checkUserExistsValue){
+                let orderList = await db.Order.findAll({
+                    where: { idCustomer: idUser },
+                })
+                
+                if(orderList && orderList.length > 0){
+                    resolve({
+                        errCode: 0,
+                        message: `Lấy tất cả đơn hàng theo ID khách hàng thành công!!!`,
+                        data: orderList,
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: `Danh sách đơn hàng rỗng!!!`,
+                    })
+                }
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Người dùng không tồn tại!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 module.exports = {
     createNewOrder,
+    getAllOrderInfoByIdOrder,
+    getAllOrderByIdCustomer,
 }
