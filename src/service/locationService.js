@@ -4,12 +4,11 @@ import db from '../models/index';
 let createNewUserLocation = (userLocationInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let {lat, lng, idUser, detailAddress} = userLocationInput;
-            console.log('check', lat, lng, idUser, detailAddress);
-            
+            let { lat, lng, idUser, detailAddress } = userLocationInput;
+
             if (lat && lng && idUser) {
                 let checkIdUser = await checkUserId(idUser);
-                if(!checkIdUser){
+                if (!checkIdUser) {
                     resolve({
                         errCode: 2,
                         message: 'ID người dùng không tồn tại!!!'
@@ -32,8 +31,6 @@ let createNewUserLocation = (userLocationInput) => {
                         let userLocation = await db.UserLocation.findOne({
                             where: { idUser: idUser },
                         })
-
-                        console.log('check userLocation: ', userLocation);
 
                         resolve({
                             errCode: 0,
@@ -58,15 +55,15 @@ let getAllUserLocation = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let userCoordinates = [];
-            if(userId){
+            if (userId) {
                 let checkIdUser = await checkUserId(userId);
-                if(checkIdUser){
+                if (checkIdUser) {
                     userCoordinates = await db.UserLocation.findAll({
                         where: {
                             idUser: userId,
                         },
                     })
-                    if(userCoordinates){
+                    if (userCoordinates) {
                         resolve({
                             errCode: 0,
                             message: 'OK!!!',

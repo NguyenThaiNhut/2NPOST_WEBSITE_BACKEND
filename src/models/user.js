@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idCustomer',
         as: 'Order',
       });
+      this.belongsTo(models.Transporter, {
+        foreignKey: 'idTransporter',
+        as: 'transporter-user',
+      });
     }
   };
   User.init({

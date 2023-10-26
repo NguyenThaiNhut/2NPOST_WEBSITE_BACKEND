@@ -161,6 +161,30 @@ let handleGetServiceOfTransporter = async (req, res) => {
 
 }
 
+let handleCreateServiceOfTransporter = async (req, res) => {
+    //[keyService], idTransporter
+    let serviceArr = req.body.serviceArr;
+    let idTransporter = req.body.idTransporter;
+
+    let message = await TransporterService.CreateServiceOfTransporter(serviceArr, idTransporter);
+    return res.status(200).json(message)
+}
+
+let handleDeleteServiceOfTransporter = async (req, res) => {
+    let serviceArr = req.body.serviceArr;
+    let idTransporter = req.body.idTransporter;
+    if (!idTransporter && !serviceArr) {
+        return res.status(200).json({
+            errCode: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+
+    let message = await TransporterService.DeleteServiceOfTransporter(serviceArr, idTransporter);
+
+    return res.status(200).json(message)
+}
+
 // lấy phạm vi của transporter
 let handleGetScopeOfTransporter = async (req, res) => {
     let idTransporter = req.query.idTransporter;
@@ -178,12 +202,107 @@ let handleGetScopeOfTransporter = async (req, res) => {
     }
 
 }
-//chỉnh sửa thông tin nhà vận chuyển
-// let handleEditInfoTrans = async (req, res) => {
-//     let transporterEdit = req.body.transporterEdit;
-//     let message = await TransporterService.editInfoTrans(transporterEdit);
-//     return res.status(200).json(message)
-// }
+// chỉnh sửa thông tin nhà vận chuyển
+let handleEditInfoTrans = async (req, res) => {
+    let transporterEdit = req.body.transporterEdit;
+    let message = await TransporterService.editInfoTrans(transporterEdit);
+    return res.status(200).json(message)
+}
+
+let handleCreateScopeOfTransporter = async (req, res) => {
+    //[keyScope], idTransporter
+    let scopeArr = req.body.scopeArr;
+    let idTransporter = req.body.idTransporter;
+    let message = await TransporterService.CreateScopeOfTransporter(scopeArr, idTransporter);
+    return res.status(200).json(message)
+}
+
+let handleDeleteScopeOfTransporter = async (req, res) => {
+    let scopeArr = req.body.scopeArr;
+    let idTransporter = req.body.idTransporter;
+    if (!idTransporter && !scopeArr) {
+        return res.status(200).json({
+            errCode: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+
+    let message = await TransporterService.DeleteScopeOfTransporter(scopeArr, idTransporter);
+
+    return res.status(200).json(message)
+}
+
+//chi phí nhà vận chuyển
+let handleCreateCostOfTransporter = async (req, res) => {
+    let keyService = req.body.keyService;
+    let costArr = req.body.costArr;
+    let idTransporter = req.body.idTransporter;
+    console.log(keyService, costArr, idTransporter)
+    let message = await TransporterService.CreateCostOfTransporter(keyService, costArr, idTransporter);
+    return res.status(200).json(message)
+}
+let handleGetCostOfTransporterByService = async (req, res) => {
+    let keyService = req.query.keyService;
+    let idTransporter = req.query.idTransporter;
+    try {
+        let message = await TransporterService.GetCostOfTransporterByService(keyService, idTransporter);
+        return res.status(200).json(message)
+
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+}
+let handleUpdateCostOfTransporterByService = async (req, res) => {
+    let keyService = req.body.keyService;
+    let costArr = req.body.costArr;
+    let idTransporter = req.body.idTransporter;
+    try {
+        let message = await TransporterService.UpdateCostOfTransporterByService(keyService, costArr, idTransporter);
+        return res.status(200).json(message)
+
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+}
+
+//quản lý tài xế theo nhà vận chuyển
+let handleGetAllDriverOfTransporter = async (req, res) => {
+    let idTransporter = req.query.idTransporter;
+    try {
+        let message = await TransporterService.GetAllDriverOfTransporter(idTransporter);
+        return res.status(200).json(message)
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+}
+let handleDeleteDriver = async (req, res) => {
+    let id = req.body.id;
+    if (!id) {
+        return res.status(200).json({
+            errCode: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+    let message = await TransporterService.deleteDriver(id);
+    return res.status(200).json(message)
+}
+let handleEditDriver = async (req, res) => {
+    let driverEdit = req.body.driverEdit;
+    let message = await TransporterService.editDriver(driverEdit);
+    return res.status(200).json(message)
+}
 
 module.exports = {
     handleGetOrdersByService,
@@ -197,5 +316,15 @@ module.exports = {
     handleEditVehicle,
     handleGetServiceOfTransporter,
     handleGetScopeOfTransporter,
-    // handleEditInfoTrans
+    handleEditInfoTrans,
+    handleCreateServiceOfTransporter,
+    handleDeleteServiceOfTransporter,
+    handleCreateScopeOfTransporter,
+    handleDeleteScopeOfTransporter,
+    handleCreateCostOfTransporter,
+    handleGetCostOfTransporterByService,
+    handleUpdateCostOfTransporterByService,
+    handleGetAllDriverOfTransporter,
+    handleDeleteDriver,
+    handleEditDriver
 }

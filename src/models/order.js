@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idCustomer',
         as: 'user',
       });
-      
+
       this.belongsTo(models.AllCode, {
         foreignKey: 'keyService',
         targetKey: 'key',

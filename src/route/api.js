@@ -63,6 +63,7 @@ const initAPIRoute = (app) => {
     TransporterController.handleGetTransporterByIdUser); //lấy TT transporter dựa vào id.user
   router.get('/transporter-get-weight-by-vehicle',
     TransporterController.handleGetWeightByVehicle); //lấy weight by vehicle
+
   router.post('/transporter-create-vehicle',
     TransporterController.handleCreateVehicle); //tạo phương tiện
   router.get('/transporter-get-vehicle-by-idTransporter',
@@ -71,12 +72,37 @@ const initAPIRoute = (app) => {
     TransporterController.handleDeleteVehicle); // xóa phương tiện theo id
   router.put("/transporter-edit-vehicle",
     TransporterController.handleEditVehicle); // chỉnh sửa thông tin phương tiện
+
   router.get("/transporter-get-service-of-transporter",
-    TransporterController.handleGetServiceOfTransporter); // lấy dịch vụ của transporter
+    TransporterController.handleGetServiceOfTransporter); // lấy dịch vụ của nhà vận chuyển
+  router.post("/transporter-create-service-of-transporter",
+    TransporterController.handleCreateServiceOfTransporter); // tạo dịch vụ cho nhà vận chuyển
+  router.delete("/transporter-delete-service-of-transporter",
+    TransporterController.handleDeleteServiceOfTransporter); // xóa dịch vụ của nhà vận chuyển
+
   router.get("/transporter-get-scope-of-transporter",
-    TransporterController.handleGetScopeOfTransporter); // lấy phạm vi của transporter
-  // router.put("/transporter-edit-info-transporter",
-  //   TransporterController.handleEditInfoTrans); // chỉnh sửa thông tin nvc
+    TransporterController.handleGetScopeOfTransporter); // lấy phạm vi của nhà vận chuyển
+  router.post("/transporter-create-scope-of-transporter",
+    TransporterController.handleCreateScopeOfTransporter); // tạo phạm vi cho nhà vận chuyển
+  router.delete("/transporter-delete-scope-of-transporter",
+    TransporterController.handleDeleteScopeOfTransporter); // xóa phạm vi của nhà vận chuyển
+
+  router.put("/transporter-edit-info-transporter",
+    TransporterController.handleEditInfoTrans); // chỉnh sửa thông tin nvc
+
+  router.post('/create-cost-of-transporter',
+    TransporterController.handleCreateCostOfTransporter); //tạo chi phí cho nhà vận chuyển
+  router.get('/get-cost-of-transporter-by-service',
+    TransporterController.handleGetCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
+  router.put('/update-cost-of-transporter-by-service',
+    TransporterController.handleUpdateCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
+
+  router.get('/get-all-driver-of-transporter',
+    TransporterController.handleGetAllDriverOfTransporter); //Lấy tất cả tài xế theo idTransporter
+  router.delete("/transporter-delete-driver",
+    TransporterController.handleDeleteDriver); // xóa tài xế theo id
+  router.put("/transporter-edit-driver",
+    TransporterController.handleEditDriver); // chỉnh sửa thông tin tài xế
   // cost 
   router.get('/get-cost-code', costController.handleGetCostCode);
 

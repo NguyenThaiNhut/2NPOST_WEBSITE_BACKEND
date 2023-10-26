@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idTransporter',
         as: 'ServiceOfTransporter',
       });
+      this.hasOne(models.User, {
+        foreignKey: 'idTransporter',
+        as: 'user-transporter',
+      });
     }
   };
   Transporter.init({

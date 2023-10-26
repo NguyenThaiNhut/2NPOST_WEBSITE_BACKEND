@@ -26,7 +26,7 @@ let createNewUser = (userInput) => {
                             keyGender: userInput.keyGender,
                             address: userInput.address,
                             idDefaultLocation: userInput.idDefaultLocation,
-                            // image
+                            image: userInput.image,// image
                             email: userInput.email,
                             password: hashPasswordFromBcrypt,
                             phone: userInput.phone,
@@ -36,7 +36,10 @@ let createNewUser = (userInput) => {
                         })
 
                         let user = await db.User.findOne({
-                            where: { phone: userInput.phone },
+                            where: {
+                                phone: userInput.phone,
+                                keyRole: userInput.keyRole
+                            },
                             raw: true,
                         })
 
