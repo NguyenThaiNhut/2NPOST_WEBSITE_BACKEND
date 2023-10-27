@@ -14,6 +14,7 @@ let handleLogin = async (req, res) => {
     let phone = req.body.phone;
     let password = req.body.password;
     let keyRole = req.body.keyRole;
+    console.log(req.body);
 
     // check email hoac pass rong?
     if (!phone || !password || !keyRole) {

@@ -21,11 +21,14 @@ let handleGetAllOrderInfo = async (req, res) => {
     return res.status(200).json(message)
 }
 
-//trung gian - lấy tất cả thông tin đơn hàng theo id đơn hàng
+//trung gian - lấy tất cả đơn hàng theo id người dùng và trạng thái đơn hàng
 let handleGetAllOrderByIdCustomer = async (req, res) => {
     let id = req.query.id;
+    let keyOrderStatus = req.query.keyOrderStatus;
+
+    console.log('check', id, keyOrderStatus)
     
-    let message = await orderService.getAllOrderByIdCustomer(id);
+    let message = await orderService.getAllOrderByIdCustomer(id, keyOrderStatus);
     return res.status(200).json(message)
 }
 

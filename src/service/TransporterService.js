@@ -581,6 +581,8 @@ let editInfoTrans = (transporterEdit) => {
         }
     })
 }
+
+
 let CreateScopeOfTransporter = (scopeArr, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -608,6 +610,8 @@ let CreateScopeOfTransporter = (scopeArr, idTransporter) => {
         }
     })
 }
+
+
 let DeleteScopeOfTransporter = async (scopeArr, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -641,6 +645,8 @@ let DeleteScopeOfTransporter = async (scopeArr, idTransporter) => {
         }
     })
 }
+
+
 let CreateCostOfTransporter = (keyService, costArr, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -679,6 +685,8 @@ let CreateCostOfTransporter = (keyService, costArr, idTransporter) => {
         }
     })
 }
+
+
 let GetCostOfTransporterByService = (keyService, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -702,6 +710,8 @@ let GetCostOfTransporterByService = (keyService, idTransporter) => {
         }
     })
 }
+
+
 let UpdateCostOfTransporterByService = (keyService, costArr, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -751,6 +761,7 @@ let UpdateCostOfTransporterByService = (keyService, costArr, idTransporter) => {
     })
 }
 
+
 //quản lý tài xế theo nhà vận chuyển
 let GetAllDriverOfTransporter = (idTransporter) => {
     return new Promise(async (resolve, reject) => {
@@ -775,6 +786,8 @@ let GetAllDriverOfTransporter = (idTransporter) => {
         }
     })
 }
+
+
 let deleteDriver = async (idDriverDel) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -808,6 +821,8 @@ let deleteDriver = async (idDriverDel) => {
         }
     })
 }
+
+
 let editDriver = (driverEdit) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -870,6 +885,69 @@ let editDriver = (driverEdit) => {
         }
     })
 }
+
+//lấy tất cả đơn hàng theo id của khách hàng và trạng thái đơn hàng (nếu có)
+let getAllTransporterByIdTransporter = (status) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('check ', status);
+            if(status){
+                let transporterList = await db.Transporter.findAll({
+                    where: { 
+                        status: status,
+                    },
+                    include: [
+                        {
+                            model: db.User, // thông tin khách hàng
+                            as: 'user-transporter', // Đặt tên cho mối quan hệ
+                            where: {
+                                keyRole: 'R2',
+                            },
+                            attributes: { exclude: ['password'] }
+                        },
+                        {
+                            model: db.ServiceOfTransporter, // dịch vụ của đơn hàng
+                            as: 'ServiceOfTransporter', // Đặt tên cho mối quan hệ
+                        },
+                        // {
+                        //     model: db.AllCode, // trạng thái của đơn hàng
+                        //     as: 'keyOrderStatusAllCode', // Đặt tên cho mối quan hệ
+                        // },
+                        // {
+                        //     model: db.UserLocation, // tọa độ người gửi
+                        //     as: 'senderLocation', // Đặt tên cho mối quan hệ
+                        // },
+                    ],
+                    raw: false,
+                })
+                
+                if(transporterList && transporterList.length > 0){
+                    resolve({
+                        errCode: 0,
+                        message: 'Lấy danh sách nhà vận chuyển thành công!!!',
+                        data: transporterList,
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: 'Danh sách nhà vận chuyển không tồn tại!!!',
+                        data: [],
+                    })
+                }
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Vui lòng nhập trạng thái hoạt động của nhà vận chuyển!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
 module.exports = {
     getOrdersByService,
     getOrderStatusByKey,
@@ -892,5 +970,6 @@ module.exports = {
     UpdateCostOfTransporterByService,
     GetAllDriverOfTransporter,
     deleteDriver,
-    editDriver
+    editDriver,
+    getAllTransporterByIdTransporter,
 }
