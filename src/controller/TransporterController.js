@@ -14,9 +14,7 @@ let handleGetOrdersByService = async (req, res) => {
             error: 1,
             message: 'Vui lòng nhập thông tin!!!'
         })
-
     }
-
 }
 
 // lấy bảng allcode theo Key - và khi key=All thì nó trả về trạng thái đơn hàng
@@ -157,9 +155,7 @@ let handleGetServiceOfTransporter = async (req, res) => {
             error: 1,
             message: 'Vui lòng nhập thông tin!!!'
         })
-
     }
-
 }
 
 let handleCreateServiceOfTransporter = async (req, res) => {

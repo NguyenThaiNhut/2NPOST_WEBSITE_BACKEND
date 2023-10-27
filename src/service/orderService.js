@@ -7,12 +7,12 @@ let checkOrderExists = (idOrder) => {
             let order = await db.Order.findOne({
                 where: { id: idOrder },
             })
-            if(order){
+            if (order) {
                 resolve(true)
             } else {
                 resolve(false)
             }
-            
+
         } catch (error) {
             reject(error);
         }
@@ -24,7 +24,7 @@ let getTypeOfGoodsByOrder = (idOrder) => {
     return new Promise(async (resolve, reject) => {
         try {
             let checkOrder = await checkOrderExists(idOrder);
-            if(checkOrder){
+            if (checkOrder) {
                 let typeOfGoods = await db.TypeOfGoodsByOrder.findAll({
                     where: { idOrder: idOrder },
                     include: [
@@ -35,7 +35,7 @@ let getTypeOfGoodsByOrder = (idOrder) => {
                     ],
                     raw: false
                 })
-                if(typeOfGoods){
+                if (typeOfGoods) {
                     resolve({
                         errCode: 0,
                         message: `Lấy tất cả loại hàng hóa theo đơn hàng thành công!!!`,
@@ -66,7 +66,7 @@ let getGoodsByOrder = (idOrder) => {
     return new Promise(async (resolve, reject) => {
         try {
             let checkOrder = await checkOrderExists(idOrder);
-            if(checkOrder){
+            if (checkOrder) {
                 let goods = await db.Goods.findAll({
                     where: { idOrder: idOrder },
                     // include: [
@@ -77,7 +77,7 @@ let getGoodsByOrder = (idOrder) => {
                     // ],
                     // raw: false
                 })
-                if(goods){
+                if (goods) {
                     resolve({
                         errCode: 0,
                         message: `Lấy tất cả hàng hóa theo đơn hàng thành công!!!`,
@@ -109,17 +109,17 @@ let checkUserExists = (idUser) => {
             let user = await db.User.findOne({
                 where: { id: idUser },
             })
-            if(user){
+            if (user) {
                 resolve(true)
             } else {
                 resolve(false)
             }
-            
+
         } catch (error) {
             reject(error);
         }
     });
-} 
+}
 
 // kiểm tra key của 2 bảng trạng thái đơn hàng & trạng thái vận chuyển có tồn tại trong database hay chưa,
 let checkKeyOrderStatusExists = (keyOrderStatus) => {
@@ -170,12 +170,12 @@ let getAllOrderInfoByIdOrder = (idOrder) => {
                 ],
                 raw: false,
             })
-            
-            if(order){
+
+            if (order) {
                 let typeOfGoods = await getTypeOfGoodsByOrder(idOrder);
                 console.log('check: ', typeOfGoods);
-                if(typeOfGoods.errCode == 0){
-                    if(typeOfGoods.data.length > 0){
+                if (typeOfGoods.errCode == 0) {
+                    if (typeOfGoods.data.length > 0) {
                         order.setDataValue('typeOfGoods', typeOfGoods.data);
                     } else {
                         order.setDataValue('typeOfGoods', []);
@@ -184,21 +184,21 @@ let getAllOrderInfoByIdOrder = (idOrder) => {
 
                 let goods = await getGoodsByOrder(idOrder);
                 console.log('check: ', goods);
-                if(goods.errCode == 0){
-                    if(goods.data.length > 0){
+                if (goods.errCode == 0) {
+                    if (goods.data.length > 0) {
                         order.setDataValue('goods', goods.data);
                     } else {
                         order.setDataValue('goods', []);
                     }
                 }
-                
-                
+
+
                 resolve({
                     errCode: 0,
                     message: `Lấy thông tin đơn hàng thành công!!!`,
                     data: order,
                 })
-                
+
             } else {
                 resolve({
                     errCode: 1,
@@ -261,6 +261,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
             let checkUserExistsValue = await checkUserExists(idUser);
+
             if(checkUserExistsValue){
                 if(keyOrderStatus == 'ALL'){
                     let orderList = await db.Order.findAll({

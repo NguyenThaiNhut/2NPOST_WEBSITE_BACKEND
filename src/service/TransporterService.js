@@ -1,27 +1,48 @@
 import db from '../models/index';
 import { Op } from 'sequelize';
 import { checkUserPhoneBykeyRole, hashUserPassword, removeFileService } from './userSevice';
+import { getAllOrderInfoByIdOrder } from './orderService'
 
 // lấy tất cả đơn hàng theo trạng thái(order-status) của NVC(idTransporter);
 let getOrdersByService = (orderStatus, idTransporter) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             let orders = [];
             if (orderStatus === 'All') {
-                orders = await db.Order.findAll({
-                    where: { idTransporter: idTransporter },
-                    raw: true,
+                let ordersByIdTransporter = await db.Order.findAll({
+                    where: { idTransporter },
+                    raw: false,
                 })
+                console.log('17', ordersByIdTransporter)
+                if (ordersByIdTransporter) {
+                    for (const or of ordersByIdTransporter) {
+                        let order = await getAllOrderInfoByIdOrder(or.id);
+                        if (order) {
+                            orders.push(order.data);
+                        }
+                    }
+                }
             }
 
             else {
-                orders = await db.Order.findAll({
-                    where: { keyOrderStatus: orderStatus, idTransporter: idTransporter },
-                    raw: true,
+                let ordersByIdTransporter = await db.Order.findAll({
+                    where: { idTransporter: idTransporter, keyOrderStatus: orderStatus },
+                    raw: false,
                 })
+                if (ordersByIdTransporter) {
+                    for (const or of ordersByIdTransporter) {
+                        let order = await getAllOrderInfoByIdOrder(or.id);
+                        if (order) {
+                            orders.push(order.data);
+                        }
+                    }
+                }
             }
-            resolve(orders);
+            resolve({
+                error: 0,
+                message: 'Ok',
+                data: orders
+            });
 
         }
         catch (error) {
@@ -501,6 +522,7 @@ let editInfoTrans = (transporterEdit) => {
                     user.image = transporterEdit.image;
                     user.email = transporterEdit.email;
                     user.address = transporterEdit.address;
+                    user.idDefaultLocation = transporterEdit.idDefaultLocation;
                     await user.save();
 
                     let transporter = await db.Transporter.findOne({
