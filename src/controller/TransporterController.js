@@ -57,6 +57,7 @@ let handleCreateAccountTransporter = async (req, res) => {
 //lấy TT transporter dựa vào id.user
 let handleGetTransporterByIdUser = async (req, res) => {
     let idUser = req.query.id;
+    console.log('check id transporter: ', idUser);
     try {
         let message = await TransporterService.GetTransporterByIdUser(idUser);
         return res.status(200).json(message)
@@ -298,9 +299,18 @@ let handleDeleteDriver = async (req, res) => {
     let message = await TransporterService.deleteDriver(id);
     return res.status(200).json(message)
 }
+
 let handleEditDriver = async (req, res) => {
     let driverEdit = req.body.driverEdit;
     let message = await TransporterService.editDriver(driverEdit);
+    return res.status(200).json(message)
+}
+
+//trung gian - lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển 
+let handleGetAllTransporterByIdTransporter = async (req, res) => {
+    let status = req.query.status;
+    
+    let message = await TransporterService.getAllTransporterByIdTransporter(status);
     return res.status(200).json(message)
 }
 
@@ -326,5 +336,6 @@ module.exports = {
     handleUpdateCostOfTransporterByService,
     handleGetAllDriverOfTransporter,
     handleDeleteDriver,
-    handleEditDriver
+    handleEditDriver,
+    handleGetAllTransporterByIdTransporter,
 }

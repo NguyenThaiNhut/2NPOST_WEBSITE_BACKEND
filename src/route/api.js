@@ -96,6 +96,8 @@ const initAPIRoute = (app) => {
     TransporterController.handleGetCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
   router.put('/update-cost-of-transporter-by-service',
     TransporterController.handleUpdateCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
+  router.get("/get-all-transporter-by-id-transporter", 
+    TransporterController.handleGetAllTransporterByIdTransporter); // lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển
 
   router.get('/get-all-driver-of-transporter',
     TransporterController.handleGetAllDriverOfTransporter); //Lấy tất cả tài xế theo idTransporter

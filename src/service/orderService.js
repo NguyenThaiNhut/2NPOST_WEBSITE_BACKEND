@@ -121,7 +121,29 @@ let checkUserExists = (idUser) => {
     });
 } 
 
-//lấy thông tin đơn hàng theo id đơn hàng - (chưa code xong)
+// kiểm tra key của 2 bảng trạng thái đơn hàng & trạng thái vận chuyển có tồn tại trong database hay chưa,
+let checkKeyOrderStatusExists = (keyOrderStatus) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let orderStatus = await db.AllCode.findOne({
+                where: { 
+                    type: ["ORDER_STATUS", "TRANSPORT_STATUS"],
+                    key: keyOrderStatus,
+                },
+            })
+            if(orderStatus){
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+            
+        } catch (error) {
+            reject(error);
+        }
+    });
+} 
+
+//lấy thông tin đơn hàng theo id đơn hàng
 let getAllOrderInfoByIdOrder = (idOrder) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -234,29 +256,61 @@ let createNewOrder = (orderInput) => {
     })
 }
 
-//lấy tất cả đơn hàng theo id của khách hàng
-let getAllOrderByIdCustomer = (idUser) => {
+//lấy tất cả đơn hàng theo id của khách hàng và trạng thái đơn hàng (nếu có)
+let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
             let checkUserExistsValue = await checkUserExists(idUser);
             if(checkUserExistsValue){
-                let orderList = await db.Order.findAll({
-                    where: { idCustomer: idUser },
-                })
-                
-                if(orderList && orderList.length > 0){
-                    resolve({
-                        errCode: 0,
-                        message: `Lấy tất cả đơn hàng theo ID khách hàng thành công!!!`,
-                        data: orderList,
+                if(keyOrderStatus == 'ALL'){
+                    let orderList = await db.Order.findAll({
+                        where: { 
+                            idCustomer: idUser,
+                        },
                     })
+                    
+                    if(orderList && orderList.length > 0){
+                        resolve({
+                            errCode: 0,
+                            message: `Lấy tất cả đơn hàng theo ID khách hàng thành công!!!`,
+                            data: orderList,
+                        })
+                    } else {
+                        resolve({
+                            errCode: 2,
+                            message: `Danh sách đơn hàng rỗng!!!`,
+                        })
+                    }
                 } else {
-                    resolve({
-                        errCode: 2,
-                        message: `Danh sách đơn hàng rỗng!!!`,
-                    })
+                    //kiểm tra xem key order status có tồn tại hay không?
+                    let checkKeyOrderStatusExistsValue = await checkKeyOrderStatusExists(keyOrderStatus);
+                    if(checkKeyOrderStatusExistsValue){
+                        let orderList = await db.Order.findAll({
+                            where: { 
+                                idCustomer: idUser,
+                                keyOrderStatus: keyOrderStatus,
+                            },
+                        })
+                        
+                        if(orderList && orderList.length > 0){
+                            resolve({
+                                errCode: 0,
+                                message: `Lấy tất cả đơn hàng theo ID khách hàng và trạng thái đơn hàng thành công!!!`,
+                                data: orderList,
+                            })
+                        } else {
+                            resolve({
+                                errCode: 2,
+                                message: `Danh sách đơn hàng rỗng!!!`,
+                            })
+                        }
+                    } else {
+                        resolve({
+                            errCode: 3,
+                            message: `Không tìm thấy key của trạng thái đơn hàng!!!`,
+                        })
+                    }
                 }
-
             } else {
                 resolve({
                     errCode: 1,
