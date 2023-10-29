@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idTransporter',
         as: 'UserTransporter',
       });
-      
+
     }
   };
   Transporter.init({

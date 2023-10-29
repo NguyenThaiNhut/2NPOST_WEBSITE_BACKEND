@@ -891,9 +891,9 @@ let getAllTransporterByIdTransporter = (status) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log('check ', status);
-            if(status){
+            if (status) {
                 let transporterList = await db.Transporter.findAll({
-                    where: { 
+                    where: {
                         status: status,
                     },
                     include: [
@@ -927,7 +927,8 @@ let getAllTransporterByIdTransporter = (status) => {
                     ],
                     raw: false,
                 })
-                
+
+         
                 if(transporterList && transporterList.length > 0){
                     let transporterLocationList = await Promise.all(transporterList.map( async (item, index) => {
                         if(item.UserTransporter && item.UserTransporter.idDefaultLocation){
