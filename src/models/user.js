@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.belongsTo(models.Transporter, {
         foreignKey: 'idTransporter',
-        as: 'transporter-user',
+        as: 'TransporterUser',
       });
     }
   };

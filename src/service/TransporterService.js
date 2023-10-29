@@ -891,15 +891,15 @@ let getAllTransporterByIdTransporter = (status) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log('check ', status);
-            if(status){
+            if (status) {
                 let transporterList = await db.Transporter.findAll({
-                    where: { 
+                    where: {
                         status: status,
                     },
                     include: [
                         {
                             model: db.User, // thông tin khách hàng
-                            as: 'user-transporter', // Đặt tên cho mối quan hệ
+                            as: 'UserTransporter', // Đặt tên cho mối quan hệ
                             where: {
                                 keyRole: 'R2',
                             },
@@ -920,8 +920,8 @@ let getAllTransporterByIdTransporter = (status) => {
                     ],
                     raw: false,
                 })
-                
-                if(transporterList && transporterList.length > 0){
+
+                if (transporterList && transporterList.length > 0) {
                     resolve({
                         errCode: 0,
                         message: 'Lấy danh sách nhà vận chuyển thành công!!!',

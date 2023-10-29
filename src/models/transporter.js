@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(models.User, {
         foreignKey: 'idTransporter',
-        as: 'user-transporter',
+        as: 'UserTransporter',
       });
-      
+
     }
   };
   Transporter.init({
