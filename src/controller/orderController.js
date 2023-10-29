@@ -1,7 +1,7 @@
 import orderService from '../service/orderService';
 
 
-//tạo mới đơn hàng theo người dùng 
+//tạo mới đơn hàng theo người dùng
 let handleCreateNewOrder = async (req, res) => {
     let orderInput = req.body;
     console.log(orderInput);
@@ -32,8 +32,21 @@ let handleGetAllOrderByIdCustomer = async (req, res) => {
     return res.status(200).json(message)
 }
 
+//cập nhật trnagj thái đơn hàng 
+let handleUpdateKeyOrderStatus = async (req, res) => {
+    let idOrder = req.body.id;
+    let keyOrderStatus = req.body.keyOrderStatus;
+    
+    let message = await orderService.updateKeyOrderStatus(idOrder, keyOrderStatus);
+    return res.status(200).json(message)
+
+    // let message = await orderService.createNewOrder();
+    // return res.status(200).json(message)
+}
+
 module.exports = {
     handleCreateNewOrder,
     handleGetAllOrderInfo,
     handleGetAllOrderByIdCustomer,
+    handleUpdateKeyOrderStatus
 }
