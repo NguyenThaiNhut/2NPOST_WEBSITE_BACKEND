@@ -125,12 +125,14 @@ let checkUserExists = (idUser) => {
 let checkKeyOrderStatusExists = (keyOrderStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let orderStatus = await db.AllCode.findOne({
+            console.log('checkkkk: ', keyOrderStatus);
+            let orderStatus = await db.AllCode.findAll({
                 where: { 
                     type: ["ORDER_STATUS", "TRANSPORT_STATUS"],
                     key: keyOrderStatus,
                 },
             })
+            console.log('checkkkkkk: ', orderStatus);
             if(orderStatus){
                 resolve(true)
             } else {
@@ -285,6 +287,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                 } else {
                     //kiểm tra xem key order status có tồn tại hay không?
                     let checkKeyOrderStatusExistsValue = await checkKeyOrderStatusExists(keyOrderStatus);
+                    console.log('check checkKeyOrderStatusExistsValue: ', checkKeyOrderStatusExistsValue);
                     if(checkKeyOrderStatusExistsValue){
                         let orderList = await db.Order.findAll({
                             where: { 
@@ -324,8 +327,54 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
     })
 }
 
+// cập nhật trạng thái đơn hàng ()
+let updateKeyOrderStatus = (idOrder, keyStatus) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkOrderExistsValue = await checkOrderExists(idOrder);
+
+            if(checkOrderExistsValue){
+                if(keyStatus){
+                    let order = await db.Order.findOne({
+                        where: { id: idOrder },
+                        raw: false,
+                    })
+                    if (order) {
+                        order.keyOrderStatus = keyStatus;
+    
+                        await order.save();
+    
+                        resolve({
+                            errCode: 0,
+                            message: 'Trạng thái đơn hàng đã được cập nhật!'
+                        })
+                    } else {
+                        resolve({
+                            errCode: 3,
+                            message: `Đơn hàng không tồn tại!!!`
+                        })
+                    }
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: `Vui lòng nhập trạng thái đơn hàng!!!`,
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Người dùng không tồn tại!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 module.exports = {
     createNewOrder,
     getAllOrderInfoByIdOrder,
     getAllOrderByIdCustomer,
+    updateKeyOrderStatus,
 }

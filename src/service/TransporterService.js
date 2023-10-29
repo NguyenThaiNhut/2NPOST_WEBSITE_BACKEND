@@ -903,25 +903,54 @@ let getAllTransporterByIdTransporter = (status) => {
                             where: {
                                 keyRole: 'R2',
                             },
-                            attributes: { exclude: ['password'] }
+                            attributes: { 
+                                exclude: [
+                                    'userName', 
+                                    'birthday', 
+                                    'keyGender', 
+                                    'idTransporter', 
+                                    'status', 
+                                ] 
+                            },
                         },
                         {
                             model: db.ServiceOfTransporter, // dịch vụ của đơn hàng
                             as: 'ServiceOfTransporter', // Đặt tên cho mối quan hệ
+                            attributes: { 
+                                exclude: [
+                                    'idTransporter', 
+                                    'createdAt',
+                                    'updatedAt',
+                                ] 
+                            }
                         },
-                        // {
-                        //     model: db.AllCode, // trạng thái của đơn hàng
-                        //     as: 'keyOrderStatusAllCode', // Đặt tên cho mối quan hệ
-                        // },
-                        // {
-                        //     model: db.UserLocation, // tọa độ người gửi
-                        //     as: 'senderLocation', // Đặt tên cho mối quan hệ
-                        // },
                     ],
                     raw: false,
                 })
 
-                if (transporterList && transporterList.length > 0) {
+         
+                if(transporterList && transporterList.length > 0){
+                    let transporterLocationList = await Promise.all(transporterList.map( async (item, index) => {
+                        if(item.UserTransporter && item.UserTransporter.idDefaultLocation){
+                            let transporterLocation = await db.UserLocation.findOne({
+                                where: {
+                                    id: item.UserTransporter.idDefaultLocation
+                                }
+                            })
+                            if(transporterLocation){
+                                return transporterLocation;
+                            }
+                        } else {
+                            return {};
+                        }
+                    }))
+
+                    if(transporterLocationList && transporterLocationList.length > 0){
+                        transporterList.map((item, index) => {
+                            item.setDataValue('TransporterLocation', transporterLocationList[index]);
+                        })
+                    }
+
                     resolve({
                         errCode: 0,
                         message: 'Lấy danh sách nhà vận chuyển thành công!!!',

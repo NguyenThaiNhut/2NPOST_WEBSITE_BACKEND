@@ -131,6 +131,7 @@ const initAPIRoute = (app) => {
   router.post("/create-new-order", orderController.handleCreateNewOrder); // tạo mới đơn hàng người dùng 
   router.get("/get-all-order-info", orderController.handleGetAllOrderInfo); //lấy tất cả thông tin đơn hàng theo id đơn hàng
   router.get("/get-all-order-by-id-customer", orderController.handleGetAllOrderByIdCustomer); //lấy tất cả đơn hàng theo id của khách hàng
+  router.put("/update-key-order-status", orderController.handleUpdateKeyOrderStatus); // cập nhật trạng thái đơn hàng theo id đơn hàng
 
   // goods
   router.post("/create-new-goods", goodsController.handleCreateNewGoods); // tạo mới sản phẩm trong đơn hàng
