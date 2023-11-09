@@ -511,6 +511,7 @@ let GetScopeOfTransporter = (idTransporter) => {
 let editInfoTrans = (transporterEdit) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(transporterEdit)
             // thêm userLocation, nếu đã tồn tại thì xóa
             if (transporterEdit.id) {
 
@@ -786,7 +787,36 @@ let GetAllDriverOfTransporter = (idTransporter) => {
         }
     })
 }
-
+let GetDriverById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let driver = await db.User.findOne({
+                where: {
+                    id: id,
+                    keyRole: 'R3'
+                },
+                raw: false,
+            });
+            if (driver) {
+                resolve({
+                    errCode: 0,
+                    message: 'OK',
+                    data: driver,
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    message: 'Không tìm thấy người dùng',
+                })
+            }
+        }
+        catch (error) {
+            console.log(error)
+            reject(error);
+        }
+    })
+}
 
 let deleteDriver = async (idDriverDel) => {
     return new Promise(async (resolve, reject) => {
@@ -902,8 +932,14 @@ let getAllTransporterByIdTransporter = (status) => {
                             where: {
                                 keyRole: 'R2',
                             },
-                            attributes: { 
+                            attributes: {
                                 exclude: [
+                                    'userName',
+                                    'birthday',
+                                    'keyGender',
+                                    'idTransporter',
+                                    'status',
+                                ]
                                     'userName', 
                                     'birthday', 
                                     'keyGender', 
@@ -916,11 +952,13 @@ let getAllTransporterByIdTransporter = (status) => {
                         {
                             model: db.ServiceOfTransporter, // dịch vụ của đơn hàng
                             as: 'ServiceOfTransporter', // Đặt tên cho mối quan hệ
-                            attributes: { 
+                            attributes: {
                                 exclude: [
-                                    'idTransporter', 
+                                    'idTransporter',
                                     'createdAt',
                                     'updatedAt',
+                                ]
+                            }
                                 ] 
                             },
                         },
@@ -938,6 +976,11 @@ let getAllTransporterByIdTransporter = (status) => {
                     ],
                     raw: false,
                 })
+
+
+                if (transporterList && transporterList.length > 0) {
+                    let transporterLocationList = await Promise.all(transporterList.map(async (item, index) => {
+                        if (item.UserTransporter && item.UserTransporter.idDefaultLocation) {
          
                 if(transporterList && transporterList.length > 0){
                     let transporterLocationList = await Promise.all(transporterList.map( async (item, index) => {
@@ -947,7 +990,7 @@ let getAllTransporterByIdTransporter = (status) => {
                                     id: item.UserTransporter.idDefaultLocation
                                 }
                             })
-                            if(transporterLocation){
+                            if (transporterLocation) {
                                 return transporterLocation;
                             }
                         } else {
@@ -955,7 +998,7 @@ let getAllTransporterByIdTransporter = (status) => {
                         }
                     }))
 
-                    if(transporterLocationList && transporterLocationList.length > 0){
+                    if (transporterLocationList && transporterLocationList.length > 0) {
                         transporterList.map((item, index) => {
                             item.setDataValue('TransporterLocation', transporterLocationList[index]);
                         })
@@ -1173,6 +1216,7 @@ module.exports = {
     deleteDriver,
     editDriver,
     getAllTransporterByIdTransporter,
+    GetDriverById
     getTransporterInfoByIdTransporter,
     searchTransporterByName,
 }

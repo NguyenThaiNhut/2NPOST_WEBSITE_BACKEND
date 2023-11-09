@@ -284,6 +284,19 @@ let handleGetAllDriverOfTransporter = async (req, res) => {
         })
     }
 }
+let handleGetDriverById = async (req, res) => {
+    let id = req.query.id;
+    try {
+        let message = await TransporterService.GetDriverById(id);
+        return res.status(200).json(message)
+    }
+    catch (error) {
+        return res.status(200).json({
+            error: 1,
+            message: 'Vui lòng nhập thông tin!!!'
+        })
+    }
+}
 let handleDeleteDriver = async (req, res) => {
     let id = req.body.id;
     if (!id) {
@@ -305,7 +318,7 @@ let handleEditDriver = async (req, res) => {
 //trung gian - lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển 
 let handleGetAllTransporterByIdTransporter = async (req, res) => {
     let status = req.query.status;
-    
+
     let message = await TransporterService.getAllTransporterByIdTransporter(status);
     return res.status(200).json(message)
 }
@@ -350,6 +363,7 @@ module.exports = {
     handleDeleteDriver,
     handleEditDriver,
     handleGetAllTransporterByIdTransporter,
+    handleGetDriverById
     handleGetTransporterInfoByIdTransporter,
     handleSearchTransporterByName,
 }

@@ -127,23 +127,23 @@ let checkKeyOrderStatusExists = (keyOrderStatus) => {
         try {
             console.log('checkkkk: ', keyOrderStatus);
             let orderStatus = await db.AllCode.findAll({
-                where: { 
+                where: {
                     type: ["ORDER_STATUS", "TRANSPORT_STATUS"],
                     key: keyOrderStatus,
                 },
             })
             console.log('checkkkkkk: ', orderStatus);
-            if(orderStatus){
+            if (orderStatus) {
                 resolve(true)
             } else {
                 resolve(false)
             }
-            
+
         } catch (error) {
             reject(error);
         }
     });
-} 
+}
 
 //lấy thông tin đơn hàng theo id đơn hàng
 let getAllOrderInfoByIdOrder = (idOrder) => {
@@ -168,6 +168,10 @@ let getAllOrderInfoByIdOrder = (idOrder) => {
                     {
                         model: db.UserLocation, // tọa độ người gửi
                         as: 'senderLocation', // Đặt tên cho mối quan hệ
+                    },
+                    {
+                        model: db.Transportation, // thông tin transportation
+                        as: 'transportationOrder', // Đặt tên cho mối quan hệ
                     },
                 ],
                 raw: false,
@@ -264,15 +268,15 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
         try {
             let checkUserExistsValue = await checkUserExists(idUser);
 
-            if(checkUserExistsValue){
-                if(keyOrderStatus == 'ALL'){
+            if (checkUserExistsValue) {
+                if (keyOrderStatus == 'ALL') {
                     let orderList = await db.Order.findAll({
-                        where: { 
+                        where: {
                             idCustomer: idUser,
                         },
                     })
-                    
-                    if(orderList && orderList.length > 0){
+
+                    if (orderList && orderList.length > 0) {
                         resolve({
                             errCode: 0,
                             message: `Lấy tất cả đơn hàng theo ID khách hàng thành công!!!`,
@@ -288,15 +292,15 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                     //kiểm tra xem key order status có tồn tại hay không?
                     let checkKeyOrderStatusExistsValue = await checkKeyOrderStatusExists(keyOrderStatus);
                     console.log('check checkKeyOrderStatusExistsValue: ', checkKeyOrderStatusExistsValue);
-                    if(checkKeyOrderStatusExistsValue){
+                    if (checkKeyOrderStatusExistsValue) {
                         let orderList = await db.Order.findAll({
-                            where: { 
+                            where: {
                                 idCustomer: idUser,
                                 keyOrderStatus: keyOrderStatus,
                             },
                         })
-                        
-                        if(orderList && orderList.length > 0){
+
+                        if (orderList && orderList.length > 0) {
                             resolve({
                                 errCode: 0,
                                 message: `Lấy tất cả đơn hàng theo ID khách hàng và trạng thái đơn hàng thành công!!!`,
@@ -333,17 +337,17 @@ let updateKeyOrderStatus = (idOrder, keyStatus) => {
         try {
             let checkOrderExistsValue = await checkOrderExists(idOrder);
 
-            if(checkOrderExistsValue){
-                if(keyStatus){
+            if (checkOrderExistsValue) {
+                if (keyStatus) {
                     let order = await db.Order.findOne({
                         where: { id: idOrder },
                         raw: false,
                     })
                     if (order) {
                         order.keyOrderStatus = keyStatus;
-    
+
                         await order.save();
-    
+
                         resolve({
                             errCode: 0,
                             message: 'Trạng thái đơn hàng đã được cập nhật!'
@@ -371,10 +375,88 @@ let updateKeyOrderStatus = (idOrder, keyStatus) => {
         }
     })
 }
+//thêm tài xế cho đơn hàng
+let CreateDriverForOrder = (idOrder, idDriver) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let order = await db.Transportation.findOne({
+                where: {
+                    idOrder,
+                },
+                raw: false,
+            })
+            // sửa
+            if (order) {
+                order.idDriver = idDriver;
+                await order.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Chỉnh sửa tài xế cho đơn hàng thành công',
+                })
+            }
+            // Thêm
+            else {
+                let transportation = await db.Transportation.create({
+                    idOrder: idOrder,
+                    idDriver: idDriver
+                })
+                if (transportation) {
+                    resolve({
+                        errCode: 0,
+                        message: 'Thêm tài xế vào đơn hàng thành công',
+                        data: transportation
+                    })
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+//thêm phương tiện cho đơn hàng
+let CreateVehicleForOrder = (idOrder, idVehicle) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let order = await db.Transportation.findOne({
+                where: {
+                    idOrder,
+                },
+                raw: false,
+            })
+            // sửa
+            if (order) {
+                order.idVehicle = idVehicle;
+                await order.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Chỉnh sửa phương tiện cho đơn hàng thành công',
+                })
+            }
+            // Thêm
+            else {
+                let transportation = await db.Transportation.create({
+                    idOrder: idOrder,
+                    idVehicle: idVehicle
+                })
+                if (transportation) {
+                    resolve({
+                        errCode: 0,
+                        message: 'Thêm phương tiện vào đơn hàng thành công',
+                        data: transportation
+                    })
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 
 module.exports = {
     createNewOrder,
     getAllOrderInfoByIdOrder,
     getAllOrderByIdCustomer,
     updateKeyOrderStatus,
+    CreateDriverForOrder,
+    CreateVehicleForOrder
 }
