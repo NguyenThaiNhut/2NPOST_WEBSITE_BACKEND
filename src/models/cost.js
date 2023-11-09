@@ -11,6 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Transporter, {
+        foreignKey: 'idTransporter',
+        as: 'Transporter',
+      });
+
+      this.belongsTo(models.CostCode, {
+        foreignKey: 'keyService',
+        targetKey: 'keyService',
+        as: 'keyServiceOfCostCode',
+      });
+      
+      this.belongsTo(models.CostCode, {
+        foreignKey: 'keyCost',
+        targetKey: 'key',
+        as: 'keyCostOfCostCode',
+      });
+
+      this.belongsTo(models.ServiceOfTransporter, {
+        foreignKey: 'keyService',
+        as: 'keyServiceOfServiceOfTransporter',
+      });
     }
   };
   Cost.init({

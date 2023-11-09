@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'key',
         as: 'AllCode',
       });
+
+      this.hasMany(models.Cost, {
+        foreignKey: 'keyService',
+        sourceKey: 'keyService',
+        as: 'CostByService',
+      });
     }
   };
   ServiceOfTransporter.init({

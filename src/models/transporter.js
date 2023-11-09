@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'UserTransporter',
       });
 
+      this.hasMany(models.Cost, {
+        foreignKey: 'idTransporter',
+        as: 'CostOfTransporter',
+      });
+
     }
   };
   Transporter.init({

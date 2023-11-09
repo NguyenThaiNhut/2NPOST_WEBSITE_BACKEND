@@ -98,6 +98,8 @@ const initAPIRoute = (app) => {
     TransporterController.handleUpdateCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
   router.get("/get-all-transporter-by-id-transporter", 
     TransporterController.handleGetAllTransporterByIdTransporter); // lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển
+    router.get("/get-transporter-info-by-id-transporter", 
+    TransporterController.handleGetTransporterInfoByIdTransporter); // lấy thông tin nhà vận chuyển theo id nhà vận chuyển
 
   router.get('/get-all-driver-of-transporter',
     TransporterController.handleGetAllDriverOfTransporter); //Lấy tất cả tài xế theo idTransporter
@@ -105,6 +107,10 @@ const initAPIRoute = (app) => {
     TransporterController.handleDeleteDriver); // xóa tài xế theo id
   router.put("/transporter-edit-driver",
     TransporterController.handleEditDriver); // chỉnh sửa thông tin tài xế
+  router.get('/search-transporter-by-name',
+    TransporterController.handleSearchTransporterByName); //tìm kiếm nhà vận chuyển theo từ khóa (tên)
+
+
   // cost 
   router.get('/get-cost-code', costController.handleGetCostCode);
 
