@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idSenderLocation',
         as: 'senderLocation',
       });
+
+      this.hasOne(models.Transportation, { //liên kết transportation với order
+        foreignKey: 'idOrder',
+        as: 'transportationOrder',
+      });
+
     }
   };
 

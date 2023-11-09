@@ -96,11 +96,13 @@ const initAPIRoute = (app) => {
     TransporterController.handleGetCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
   router.put('/update-cost-of-transporter-by-service',
     TransporterController.handleUpdateCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
-  router.get("/get-all-transporter-by-id-transporter", 
+  router.get("/get-all-transporter-by-id-transporter",
     TransporterController.handleGetAllTransporterByIdTransporter); // lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển
 
   router.get('/get-all-driver-of-transporter',
     TransporterController.handleGetAllDriverOfTransporter); //Lấy tất cả tài xế theo idTransporter
+  router.get('/get-driver-by-id',
+    TransporterController.handleGetDriverById); //Lấy chi tiết tài xế theo id
   router.delete("/transporter-delete-driver",
     TransporterController.handleDeleteDriver); // xóa tài xế theo id
   router.put("/transporter-edit-driver",
@@ -132,6 +134,8 @@ const initAPIRoute = (app) => {
   router.get("/get-all-order-info", orderController.handleGetAllOrderInfo); //lấy tất cả thông tin đơn hàng theo id đơn hàng
   router.get("/get-all-order-by-id-customer", orderController.handleGetAllOrderByIdCustomer); //lấy tất cả đơn hàng theo id của khách hàng
   router.put("/update-key-order-status", orderController.handleUpdateKeyOrderStatus); // cập nhật trạng thái đơn hàng theo id đơn hàng
+  router.post("/create-driver-for-order", orderController.handleCreateDriverForOrder); // Thêm tài xế cho đơn hàng
+  router.post("/create-vehicle-for-order", orderController.handleCreateVehicleForOrder); // Thêm phương tiện cho đơn hàng
 
   // goods
   router.post("/create-new-goods", goodsController.handleCreateNewGoods); // tạo mới sản phẩm trong đơn hàng
