@@ -1,4 +1,4 @@
-import db from '../models/index';
+import db, { sequelize } from '../models/index';
 import { Op } from 'sequelize';
 import { checkUserPhoneBykeyRole, hashUserPassword, removeFileService } from './userSevice';
 import { getAllOrderInfoByIdOrder } from './orderService'
@@ -916,11 +916,10 @@ let editDriver = (driverEdit) => {
     })
 }
 
-//lấy tất cả đơn hàng theo id của khách hàng và trạng thái đơn hàng (nếu có)
+// lấy tất cả nhà vận chuyển theo id nhà vận chuyển
 let getAllTransporterByIdTransporter = (status) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('check ', status);
             if (status) {
                 let transporterList = await db.Transporter.findAll({
                     where: {
@@ -941,6 +940,13 @@ let getAllTransporterByIdTransporter = (status) => {
                                     'idTransporter',
                                     'status',
                                 ]
+                                    'userName', 
+                                    'birthday', 
+                                    'keyGender', 
+                                    'idTransporter', 
+                                    'status', 
+                                    'password',
+                                ] 
                             },
                         },
                         {
@@ -953,6 +959,19 @@ let getAllTransporterByIdTransporter = (status) => {
                                     'updatedAt',
                                 ]
                             }
+                                ] 
+                            },
+                        },
+                        {
+                            model: db.Cost, // dịch vụ của đơn hàng
+                            as: 'CostOfTransporter', // Đặt tên cho mối quan hệ
+                            attributes: { 
+                                exclude: [
+                                    'idTransporter', 
+                                    'createdAt',
+                                    'updatedAt',
+                                ] ,
+                            },
                         },
                     ],
                     raw: false,
@@ -962,6 +981,10 @@ let getAllTransporterByIdTransporter = (status) => {
                 if (transporterList && transporterList.length > 0) {
                     let transporterLocationList = await Promise.all(transporterList.map(async (item, index) => {
                         if (item.UserTransporter && item.UserTransporter.idDefaultLocation) {
+         
+                if(transporterList && transporterList.length > 0){
+                    let transporterLocationList = await Promise.all(transporterList.map( async (item, index) => {
+                        if(item.UserTransporter && item.UserTransporter.idDefaultLocation){
                             let transporterLocation = await db.UserLocation.findOne({
                                 where: {
                                     id: item.UserTransporter.idDefaultLocation
@@ -979,8 +1002,9 @@ let getAllTransporterByIdTransporter = (status) => {
                         transporterList.map((item, index) => {
                             item.setDataValue('TransporterLocation', transporterLocationList[index]);
                         })
-                    }
+                    } 
 
+                    
                     resolve({
                         errCode: 0,
                         message: 'Lấy danh sách nhà vận chuyển thành công!!!',
@@ -1004,6 +1028,167 @@ let getAllTransporterByIdTransporter = (status) => {
             reject(error);
         }
     })
+}
+
+
+// lấy thông tin nhà vận chuyển theo id nhà vận chuyển
+let getTransporterInfoByIdTransporter = (idTransporter) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (idTransporter) {
+                let transporterInfo = await db.Transporter.findOne({
+                    where: {
+                        id: idTransporter,
+                    },
+                    include: [
+                        {
+                            model: db.User, // thông tin khách hàng
+                            as: 'UserTransporter', // Đặt tên cho mối quan hệ
+                            where: {
+                                keyRole: 'R2',
+                            },
+                            attributes: { 
+                                exclude: [
+                                    'userName', 
+                                    'birthday', 
+                                    'keyGender', 
+                                    'idTransporter', 
+                                    'status', 
+                                    'password',
+                                ] 
+                            },
+                        },
+                        {
+                            model: db.ServiceOfTransporter, // dịch vụ của đơn hàng
+                            as: 'ServiceOfTransporter', // Đặt tên cho mối quan hệ
+                            attributes: { 
+                                exclude: [
+                                    'idTransporter', 
+                                    'createdAt',
+                                    'updatedAt',
+                                ] 
+                            },
+                        },
+                        // {
+                        //     model: db.Cost, // dịch vụ của đơn hàng
+                        //     as: 'CostOfTransporter', // Đặt tên cho mối quan hệ
+                        //     attributes: { 
+                        //         exclude: [
+                        //             'idTransporter', 
+                        //             'createdAt',
+                        //             'updatedAt',
+                        //         ] ,
+                        //     },
+                        // },
+                    ],
+                    raw: false,
+                })
+         
+                if(transporterInfo){
+                    if(transporterInfo && transporterInfo.UserTransporter && transporterInfo.UserTransporter.idDefaultLocation){
+                        let transporterLocation = await db.UserLocation.findOne({
+                            where: {
+                                id: transporterInfo.UserTransporter.idDefaultLocation
+                            }
+                        })
+                        if(transporterLocation){
+                            transporterInfo.setDataValue('TransporterLocation', transporterLocation);
+                        }
+                    }
+                    
+                    resolve({
+                        errCode: 0,
+                        message: 'Lấy thông tin nhà vận chuyển thành công!!!',
+                        data: transporterInfo,
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        message: 'Nhà vận chuyển không tồn tại!!!',
+                        data: {},
+                    })
+                }
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Vui lòng nhập id của nhà vận chuyển!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
+//tìm kiếm nhà vận chuyển theo từ khóa (tên)
+let searchTransporterByName = (keyword) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let allTransporter = await db.Transporter.findAll({
+                where: {
+                    // transporterName: { [Op.like]: `%${keywordFormatted}%` },
+                    status: 1,
+                },
+            });
+
+            let keywordFormatted =  removeAccents(keyword.toLowerCase());
+
+            if(allTransporter){
+                let allTransporterFilter = allTransporter.filter((transporter) => 
+                    removeAccents(transporter.transporterName.toLowerCase()).includes(keywordFormatted)
+                )
+
+                resolve({
+                    errCode: 0,
+                    message: 'OK',
+                    data: allTransporterFilter,
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: 'Không tìm thấy nhà vận chuyển nào!!!',
+                    data: [],
+                })
+            }
+        }
+        catch (error) {
+            console.log(error)
+            reject(error);
+        }
+    })
+}
+
+
+// xóa dấu tiếng việt =>  dùng cho hàm tìm kiếm tên tài xế
+let removeAccents = (str) => {
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+    str = str.replace(/đ/g, "d");
+    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+    str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+    str = str.replace(/Đ/g, "D");
+    // Some system encode vietnamese combining accent as individual utf-8 characters
+    // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+    // Remove extra spaces
+    // Bỏ các khoảng trắng liền nhau
+    str = str.replace(/ + /g, " ");
+    str = str.trim();
+    // Remove punctuations
+    // Bỏ dấu câu, kí tự đặc biệt
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+    return str;
 }
 
 
@@ -1032,4 +1217,6 @@ module.exports = {
     editDriver,
     getAllTransporterByIdTransporter,
     GetDriverById
+    getTransporterInfoByIdTransporter,
+    searchTransporterByName,
 }

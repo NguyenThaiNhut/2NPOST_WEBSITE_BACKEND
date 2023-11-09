@@ -323,6 +323,22 @@ let handleGetAllTransporterByIdTransporter = async (req, res) => {
     return res.status(200).json(message)
 }
 
+//trung gian - // lấy thông tin nhà vận chuyển theo id nhà vận chuyển 
+let handleGetTransporterInfoByIdTransporter = async (req, res) => {
+    let idTransporter = req.query.id;
+    
+    let message = await TransporterService.getTransporterInfoByIdTransporter(idTransporter);
+    return res.status(200).json(message)
+}
+
+//trung gian - //tìm kiếm nhà vận chuyển theo từ khóa (tên) 
+let handleSearchTransporterByName = async (req, res) => {
+    let keyword = req.query.keyword;
+    
+    let message = await TransporterService.searchTransporterByName(keyword);
+    return res.status(200).json(message)
+}
+
 module.exports = {
     handleGetOrdersByService,
     handleGetOrderStatusByKey,
@@ -348,4 +364,6 @@ module.exports = {
     handleEditDriver,
     handleGetAllTransporterByIdTransporter,
     handleGetDriverById
+    handleGetTransporterInfoByIdTransporter,
+    handleSearchTransporterByName,
 }
