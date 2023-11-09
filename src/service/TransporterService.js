@@ -934,12 +934,7 @@ let getAllTransporterByIdTransporter = (status) => {
                             },
                             attributes: {
                                 exclude: [
-                                    'userName',
-                                    'birthday',
-                                    'keyGender',
-                                    'idTransporter',
-                                    'status',
-                                ]
+                                    
                                     'userName', 
                                     'birthday', 
                                     'keyGender', 
@@ -959,8 +954,7 @@ let getAllTransporterByIdTransporter = (status) => {
                                     'updatedAt',
                                 ]
                             }
-                                ] 
-                            },
+                    
                         },
                         {
                             model: db.Cost, // dịch vụ của đơn hàng
@@ -976,11 +970,6 @@ let getAllTransporterByIdTransporter = (status) => {
                     ],
                     raw: false,
                 })
-
-
-                if (transporterList && transporterList.length > 0) {
-                    let transporterLocationList = await Promise.all(transporterList.map(async (item, index) => {
-                        if (item.UserTransporter && item.UserTransporter.idDefaultLocation) {
          
                 if(transporterList && transporterList.length > 0){
                     let transporterLocationList = await Promise.all(transporterList.map( async (item, index) => {
@@ -1216,7 +1205,7 @@ module.exports = {
     deleteDriver,
     editDriver,
     getAllTransporterByIdTransporter,
-    GetDriverById
+    GetDriverById,
     getTransporterInfoByIdTransporter,
     searchTransporterByName,
 }

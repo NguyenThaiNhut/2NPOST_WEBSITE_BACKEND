@@ -363,7 +363,7 @@ module.exports = {
     handleDeleteDriver,
     handleEditDriver,
     handleGetAllTransporterByIdTransporter,
-    handleGetDriverById
+    handleGetDriverById,
     handleGetTransporterInfoByIdTransporter,
     handleSearchTransporterByName,
 }
