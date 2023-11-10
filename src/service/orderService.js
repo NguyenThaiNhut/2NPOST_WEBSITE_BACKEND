@@ -398,7 +398,10 @@ let CreateDriverForOrder = (idOrder, idDriver) => {
             else {
                 let transportation = await db.Transportation.create({
                     idOrder: idOrder,
-                    idDriver: idDriver
+                    idDriver: idDriver,
+                    payment: false, // thiết lập mặc định là false, chưa thanh toán
+                    keyTransportStatus: 'TS0', // thiết lập mặc định là chờ lấy hàng
+
                 })
                 if (transportation) {
                     resolve({
@@ -413,6 +416,8 @@ let CreateDriverForOrder = (idOrder, idDriver) => {
         }
     })
 }
+
+
 //thêm phương tiện cho đơn hàng
 let CreateVehicleForOrder = (idOrder, idVehicle) => {
     return new Promise(async (resolve, reject) => {
@@ -436,7 +441,9 @@ let CreateVehicleForOrder = (idOrder, idVehicle) => {
             else {
                 let transportation = await db.Transportation.create({
                     idOrder: idOrder,
-                    idVehicle: idVehicle
+                    idVehicle: idVehicle,
+                    payment: false, // thiết lập mặc định là false, chưa thanh toán
+                    keyTransportStatus: 'TS0', // thiết lập mặc định là chờ lấy hàng
                 })
                 if (transportation) {
                     resolve({
