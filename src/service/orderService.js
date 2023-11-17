@@ -1,4 +1,5 @@
 import db from '../models/index';
+import { Op } from 'sequelize';
 
 //kiểm tra đơn hàng (order) có tồn tại hay không, nếu tồn tại trả về true, ngược lại false
 let checkOrderExists = (idOrder) => {
@@ -288,17 +289,123 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                             message: `Danh sách đơn hàng rỗng!!!`,
                         })
                     }
+                } else if(keyOrderStatus == 'DRIVER_ORDER'){
+                    // lấy tất cả đơn hàng dành cho tài xế đó (tất cả trạng thái vận chuyển)
+                    // ngoại trừ TS4 (đã giao thành công)
+                    let orderListOfDriver = await db.Transportation.findAll({
+                        where: {
+                            idDriver: idUser,
+                            // keyTransportStatus: ["TS0", "TS1", "TS2", "TS3"],
+                        },
+                        include: [
+                            {
+                                model: db.Order, // dịch vụ của đơn hàng
+                                as: 'orderTransportation', // Đặt tên cho mối quan hệ
+                            },
+                        ],
+                        raw: false
+                    })
+
+                    if(orderListOfDriver.length > 0){
+                        var orderTransportationStatus = ['TS0', 'TS1', 'TS2', 'TS3'];
+
+                        orderListOfDriver = orderListOfDriver.filter((item, index) => {
+                            let key = item.orderTransportation.keyOrderStatus;
+                            console.log(key);
+                            return orderTransportationStatus.includes(key);
+                        })
+                    }
+
+                    if (orderListOfDriver && orderListOfDriver.length > 0) {
+                        resolve({
+                            errCode: 0,
+                            message: `Lấy tất cả đơn hàng theo ID tài xế thành công!!!`,
+                            data: orderListOfDriver,
+                        })
+                    } else {
+                        resolve({
+                            errCode: 2,
+                            message: `Danh sách đơn hàng rỗng!!!`,
+                        })
+                    }
+
+                } else if(keyOrderStatus == 'DRIVER_HISTORY'){
+                    // lấy tất cả đơn hàng dành cho tài xế đó (tất cả trạng thái vận chuyển)
+                    // ngoại trừ TS4 (đã giao thành công)
+                    let orderListOfDriver = await db.Transportation.findAll({
+                        where: {
+                            idDriver: idUser,
+                            // keyTransportStatus: ["TS0", "TS1", "TS2", "TS3"],
+                        },
+                        include: [
+                            {
+                                model: db.Order, // dịch vụ của đơn hàng
+                                as: 'orderTransportation', // Đặt tên cho mối quan hệ
+                            },
+                        ],
+                        raw: false
+                    })
+
+                    if(orderListOfDriver.length > 0){
+                        var orderTransportationStatus = ['TS4', 'TS5'];
+
+                        orderListOfDriver = orderListOfDriver.filter((item, index) => {
+                            let key = item.orderTransportation.keyOrderStatus;
+                            console.log(key);
+                            return orderTransportationStatus.includes(key);
+                        })
+                    }
+
+                    if (orderListOfDriver && orderListOfDriver.length > 0) {
+                        resolve({
+                            errCode: 0,
+                            message: `Lấy tất cả đơn hàng theo ID tài xế thành công!!!`,
+                            data: orderListOfDriver,
+                        })
+                    } else {
+                        resolve({
+                            errCode: 2,
+                            message: `Danh sách đơn hàng rỗng!!!`,
+                        })
+                    }
+
                 } else {
                     //kiểm tra xem key order status có tồn tại hay không?
                     let checkKeyOrderStatusExistsValue = await checkKeyOrderStatusExists(keyOrderStatus);
                     console.log('check checkKeyOrderStatusExistsValue: ', checkKeyOrderStatusExistsValue);
                     if (checkKeyOrderStatusExistsValue) {
-                        let orderList = await db.Order.findAll({
-                            where: {
-                                idCustomer: idUser,
-                                keyOrderStatus: keyOrderStatus,
-                            },
-                        })
+
+                        let orderList = [];
+                        if(keyOrderStatus == 'OS1'){
+                            orderList = await db.Order.findAll({
+                                where: {
+                                    idCustomer: idUser,
+                                    keyOrderStatus: ["TS0", "TS1", "TS2", "TS3"],
+                                },
+                                include: [
+                                    {
+                                        model: db.Transportation, // dịch vụ của đơn hàng
+                                        as: 'transportationOrder', // Đặt tên cho mối quan hệ
+                                    },
+                                ],
+                                raw: false
+                            })
+                        } else if(keyOrderStatus == 'TS4'){
+                            orderList = await db.Order.findAll({
+                                where: {
+                                    idCustomer: idUser,
+                                    keyOrderStatus: ["TS4", "TS5"],
+                                },
+                            })
+                        } else {
+                            orderList = await db.Order.findAll({
+                                where: {
+                                    idCustomer: idUser,
+                                    keyOrderStatus: keyOrderStatus,
+                                },
+                            })
+                        }
+                        
 
                         if (orderList && orderList.length > 0) {
                             resolve({
@@ -375,6 +482,46 @@ let updateKeyOrderStatus = (idOrder, keyStatus) => {
         }
     })
 }
+
+
+// cập nhật trạng thái thanh toán cho đơn hàng
+let updateOrderPaymentStatus = (idOrder, payment) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkOrderExistsValue = await checkOrderExists(idOrder);
+
+            if (checkOrderExistsValue) {
+                let transportation = await db.Transportation.findOne({
+                    where: { idOrder: idOrder },
+                    raw: false,
+                })
+                if (transportation) {
+                    transportation.payment = payment;
+
+                    await transportation.save();
+
+                    resolve({
+                        errCode: 0,
+                        message: 'Trạng thái thanh toán của đơn hàng đã được cập nhật!'
+                    })
+                } else {
+                    resolve({
+                        errCode: 3,
+                        message: `Đơn hàng vận chuyển không tồn tại!!!`
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: `Người dùng không tồn tại!!!`,
+                })
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 //thêm tài xế cho đơn hàng
 let CreateDriverForOrder = (idOrder, idDriver) => {
     return new Promise(async (resolve, reject) => {
@@ -504,5 +651,6 @@ module.exports = {
     updateKeyOrderStatus,
     CreateDriverForOrder,
     CreateVehicleForOrder,
-    CreateTransportationOrder
+    CreateTransportationOrder,
+    updateOrderPaymentStatus,
 }
