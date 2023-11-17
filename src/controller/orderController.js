@@ -68,14 +68,26 @@ let handleCreateVehicleForOrder = async (req, res) => {
     }
     let message = await orderService.CreateVehicleForOrder(idOrder, idVehicle);
     return res.status(200).json(message)
-
 }
 
+// Thêm transportation cho đơn hàng
+let handleCreateTransportationOrder = async (req, res) => {
+    let idOrder = req.body.idOrder;
+    if (!idOrder) {
+        return res.status(200).json({
+            errCode: 2,
+            message: 'Mời nhập đủ thông tin',
+        })
+    }
+    let message = await orderService.CreateTransportationOrder(idOrder);
+    return res.status(200).json(message)
+}
 module.exports = {
     handleCreateNewOrder,
     handleGetAllOrderInfo,
     handleGetAllOrderByIdCustomer,
     handleUpdateKeyOrderStatus,
     handleCreateDriverForOrder,
-    handleCreateVehicleForOrder
+    handleCreateVehicleForOrder,
+    handleCreateTransportationOrder
 }

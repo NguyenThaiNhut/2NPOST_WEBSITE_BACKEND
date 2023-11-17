@@ -98,7 +98,7 @@ const initAPIRoute = (app) => {
     TransporterController.handleUpdateCostOfTransporterByService); //lấy chi phí của nhà vận chuyển theo keyService
   router.get("/get-all-transporter-by-id-transporter",
     TransporterController.handleGetAllTransporterByIdTransporter); // lấy tất cả nhà vận chuyển theo trạng thái hoạt động của nhà vận chuyển
-    router.get("/get-transporter-info-by-id-transporter", 
+  router.get("/get-transporter-info-by-id-transporter",
     TransporterController.handleGetTransporterInfoByIdTransporter); // lấy thông tin nhà vận chuyển theo id nhà vận chuyển
 
   router.get('/get-all-driver-of-transporter',
@@ -142,6 +142,8 @@ const initAPIRoute = (app) => {
   router.put("/update-key-order-status", orderController.handleUpdateKeyOrderStatus); // cập nhật trạng thái đơn hàng theo id đơn hàng
   router.post("/create-driver-for-order", orderController.handleCreateDriverForOrder); // Thêm tài xế cho đơn hàng
   router.post("/create-vehicle-for-order", orderController.handleCreateVehicleForOrder); // Thêm phương tiện cho đơn hàng
+  router.post("/create-transportation-order", orderController.handleCreateTransportationOrder); // Tạo transportation cho đơn hàng theo id
+
 
   // goods
   router.post("/create-new-goods", goodsController.handleCreateNewGoods); // tạo mới sản phẩm trong đơn hàng

@@ -459,11 +459,50 @@ let CreateVehicleForOrder = (idOrder, idVehicle) => {
     })
 }
 
+//Thêm transportation cho đơn hàng
+let CreateTransportationOrder = (idOrder) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let order = await db.Transportation.findOne({
+                where: {
+                    idOrder,
+                },
+                raw: false,
+            })
+            // sửa
+            if (order) {
+                resolve({
+                    errCode: 0,
+                    message: 'Đơn hàng đã tồn tại trong transportation',
+                })
+            }
+            // Thêm
+            else {
+                let transportation = await db.Transportation.create({
+                    idOrder: idOrder,
+                    payment: false, // thiết lập mặc định là false, chưa thanh toán
+                    keyTransportStatus: 'TS0', // thiết lập mặc định là chờ lấy hàng
+                })
+                if (transportation) {
+                    resolve({
+                        errCode: 0,
+                        message: 'Đơn hàng đã được thêm thành công vào transportation',
+                        data: transportation
+                    })
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 module.exports = {
     createNewOrder,
     getAllOrderInfoByIdOrder,
     getAllOrderByIdCustomer,
     updateKeyOrderStatus,
     CreateDriverForOrder,
-    CreateVehicleForOrder
+    CreateVehicleForOrder,
+    CreateTransportationOrder
 }
