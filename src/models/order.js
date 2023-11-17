@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'keyServiceAllCode',
       });
 
-      this.belongsTo(models.AllCode, {
+      this.belongsTo(models.AllCode, { // định nghĩa trạng thái đơn hàng
         foreignKey: 'keyOrderStatus',
         targetKey: 'key',
         as: 'keyOrderStatusAllCode',

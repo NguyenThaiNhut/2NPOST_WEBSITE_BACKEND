@@ -140,6 +140,7 @@ const initAPIRoute = (app) => {
   router.get("/get-all-order-info", orderController.handleGetAllOrderInfo); //lấy tất cả thông tin đơn hàng theo id đơn hàng
   router.get("/get-all-order-by-id-customer", orderController.handleGetAllOrderByIdCustomer); //lấy tất cả đơn hàng theo id của khách hàng
   router.put("/update-key-order-status", orderController.handleUpdateKeyOrderStatus); // cập nhật trạng thái đơn hàng theo id đơn hàng
+  router.put("/update-order-payment-status", orderController.handleUpdateOrderPaymentStatus); // cập nhật trạng thái thanh toán của đơn hàng
   router.post("/create-driver-for-order", orderController.handleCreateDriverForOrder); // Thêm tài xế cho đơn hàng
   router.post("/create-vehicle-for-order", orderController.handleCreateVehicleForOrder); // Thêm phương tiện cho đơn hàng
 

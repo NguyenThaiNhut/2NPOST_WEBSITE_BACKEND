@@ -41,6 +41,15 @@ let handleUpdateKeyOrderStatus = async (req, res) => {
     return res.status(200).json(message)
 }
 
+//cập nhật trnagj thái thanh toán của đơn hàng 
+let handleUpdateOrderPaymentStatus = async (req, res) => {
+    let idOrder = req.body.id;
+    let payment = req.body.payment;
+
+    let message = await orderService.updateOrderPaymentStatus(idOrder, payment);
+    return res.status(200).json(message)
+}
+
 // Thêm tài xế cho đơn hàng
 let handleCreateDriverForOrder = async (req, res) => {
     let idOrder = req.body.idOrder;
@@ -77,5 +86,6 @@ module.exports = {
     handleGetAllOrderByIdCustomer,
     handleUpdateKeyOrderStatus,
     handleCreateDriverForOrder,
-    handleCreateVehicleForOrder
+    handleCreateVehicleForOrder,
+    handleUpdateOrderPaymentStatus,
 }
