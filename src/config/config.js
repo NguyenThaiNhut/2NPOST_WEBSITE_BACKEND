@@ -12,7 +12,7 @@ module.exports = {
     "query": {
       "raw": true
     },
-    "timezone": "+07:00"
+    "timezone": "+07:00",
   },
   "test": {
     "username": "root",
@@ -27,5 +27,5 @@ module.exports = {
     "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql"
-  }
+  },
 }
