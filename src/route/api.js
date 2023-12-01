@@ -9,6 +9,7 @@ import locationController from '../controller/locationController';
 import orderController from '../controller/orderController';
 import goodsController from '../controller/goodsController';
 import typeOfGoodsController from '../controller/typeOfGoodsController';
+import payment from "./payment";
 
 import multer from "multer";
 import path from "path";
@@ -152,6 +153,10 @@ const initAPIRoute = (app) => {
   // typeOfGoods
   router.post("/create-new-type-of-goods", typeOfGoodsController.handleCreateNewTypeOfGoods); // tạo mới tính chất hàng hóa trong đơn hàng
 
+
+  // chức năng thanh toán
+  router.post('/create-payment', payment.handleCreateNewPayment);
+  router.get('/vnpay_return', payment.handleGetReturn);
   return app.use('/api/', router);
 }
 

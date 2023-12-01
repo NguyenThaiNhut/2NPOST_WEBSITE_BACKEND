@@ -1,5 +1,4 @@
 import db from '../models/index';
-import { Op } from 'sequelize';
 
 //kiểm tra đơn hàng (order) có tồn tại hay không, nếu tồn tại trả về true, ngược lại false
 let checkOrderExists = (idOrder) => {
@@ -289,7 +288,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                             message: `Danh sách đơn hàng rỗng!!!`,
                         })
                     }
-                } else if(keyOrderStatus == 'DRIVER_ORDER'){
+                } else if (keyOrderStatus == 'DRIVER_ORDER') {
                     // lấy tất cả đơn hàng dành cho tài xế đó (tất cả trạng thái vận chuyển)
                     // ngoại trừ TS4 (đã giao thành công)
                     let orderListOfDriver = await db.Transportation.findAll({
@@ -306,7 +305,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                         raw: false
                     })
 
-                    if(orderListOfDriver.length > 0){
+                    if (orderListOfDriver.length > 0) {
                         var orderTransportationStatus = ['TS0', 'TS1', 'TS2', 'TS3'];
 
                         orderListOfDriver = orderListOfDriver.filter((item, index) => {
@@ -329,7 +328,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                         })
                     }
 
-                } else if(keyOrderStatus == 'DRIVER_HISTORY'){
+                } else if (keyOrderStatus == 'DRIVER_HISTORY') {
                     // lấy tất cả đơn hàng dành cho tài xế đó (tất cả trạng thái vận chuyển)
                     // ngoại trừ TS4 (đã giao thành công)
                     let orderListOfDriver = await db.Transportation.findAll({
@@ -346,7 +345,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                         raw: false
                     })
 
-                    if(orderListOfDriver.length > 0){
+                    if (orderListOfDriver.length > 0) {
                         var orderTransportationStatus = ['TS4', 'TS5'];
 
                         orderListOfDriver = orderListOfDriver.filter((item, index) => {
@@ -376,7 +375,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                     if (checkKeyOrderStatusExistsValue) {
 
                         let orderList = [];
-                        if(keyOrderStatus == 'OS1'){
+                        if (keyOrderStatus == 'OS1') {
                             orderList = await db.Order.findAll({
                                 where: {
                                     idCustomer: idUser,
@@ -390,7 +389,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                                 ],
                                 raw: false
                             })
-                        } else if(keyOrderStatus == 'TS4'){
+                        } else if (keyOrderStatus == 'TS4') {
                             orderList = await db.Order.findAll({
                                 where: {
                                     idCustomer: idUser,
@@ -405,7 +404,7 @@ let getAllOrderByIdCustomer = (idUser, keyOrderStatus) => {
                                 },
                             })
                         }
-                        
+
 
                         if (orderList && orderList.length > 0) {
                             resolve({
