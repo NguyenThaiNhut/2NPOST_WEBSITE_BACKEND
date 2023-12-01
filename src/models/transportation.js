@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Transportation.init({
     payment: DataTypes.BOOLEAN,
+    typePayment: DataTypes.INTEGER,
     idOrder: DataTypes.STRING,
     idDriver: DataTypes.STRING,
     idVehicle: DataTypes.STRING,

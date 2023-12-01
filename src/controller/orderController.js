@@ -45,8 +45,9 @@ let handleUpdateKeyOrderStatus = async (req, res) => {
 let handleUpdateOrderPaymentStatus = async (req, res) => {
     let idOrder = req.body.id;
     let payment = req.body.payment;
+    let typePayment = req.body.typePayment;
 
-    let message = await orderService.updateOrderPaymentStatus(idOrder, payment);
+    let message = await orderService.updateOrderPaymentStatus(idOrder, payment, typePayment);
     return res.status(200).json(message)
 }
 

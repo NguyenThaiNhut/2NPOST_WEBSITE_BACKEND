@@ -485,7 +485,7 @@ let updateKeyOrderStatus = (idOrder, keyStatus) => {
 
 
 // cập nhật trạng thái thanh toán cho đơn hàng
-let updateOrderPaymentStatus = (idOrder, payment) => {
+let updateOrderPaymentStatus = (idOrder, payment, typePayment) => {
     return new Promise(async (resolve, reject) => {
         try {
             let checkOrderExistsValue = await checkOrderExists(idOrder);
@@ -497,6 +497,7 @@ let updateOrderPaymentStatus = (idOrder, payment) => {
                 })
                 if (transportation) {
                     transportation.payment = payment;
+                    transportation.typePayment = typePayment;
 
                     await transportation.save();
 
