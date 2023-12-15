@@ -33,23 +33,32 @@ module.exports = function (sequelize, DataTypes) {
        */
       function associate(models) {
         // define association here
+        this.hasMany(models.Order, {
+          foreignKey: 'idCustomer',
+          as: 'Order'
+        });
+        this.belongsTo(models.Transporter, {
+          foreignKey: 'idTransporter',
+          as: 'TransporterUser'
+        });
       }
     }]);
     return User;
   }(Model);
   ;
   User.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
+    userName: DataTypes.STRING,
     birthday: DataTypes.STRING,
-    genderId: DataTypes.STRING,
+    keyGender: DataTypes.STRING,
     address: DataTypes.STRING,
+    idDefaultLocation: DataTypes.STRING,
+    image: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     phone: DataTypes.STRING,
-    status: DataTypes.STRING,
-    image: DataTypes.STRING,
-    idRole: DataTypes.STRING
+    keyRole: DataTypes.STRING,
+    idTransporter: DataTypes.STRING,
+    status: DataTypes.INTEGER
   }, {
     sequelize: sequelize,
     modelName: 'User'

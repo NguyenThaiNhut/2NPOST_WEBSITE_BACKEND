@@ -31,9 +31,7 @@ module.exports = function (sequelize, DataTypes) {
        * This method is not a part of Sequelize lifecycle.
        * The `models/index` file will call this method automatically.
        */
-      function associate(models) {
-        // define association here
-      }
+      function associate(models) {}
     }]);
     return AllCode;
   }(Model);

@@ -36,19 +36,18 @@ var createNewUser = /*#__PURE__*/function () {
                       roleId: data.roleId
                     });
                   case 6:
-                    console.log('<<<<< check data: ', data);
                     resolve('ok create a new user succesful');
-                    _context.next = 13;
+                    _context.next = 12;
                     break;
-                  case 10:
-                    _context.prev = 10;
+                  case 9:
+                    _context.prev = 9;
                     _context.t0 = _context["catch"](0);
                     reject(_context.t0);
-                  case 13:
+                  case 12:
                   case "end":
                     return _context.stop();
                 }
-              }, _callee, null, [[0, 10]]);
+              }, _callee, null, [[0, 9]]);
             }));
             return function (_x2, _x3) {
               return _ref2.apply(this, arguments);

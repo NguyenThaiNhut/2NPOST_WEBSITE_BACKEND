@@ -157,6 +157,12 @@ const initAPIRoute = (app) => {
   // chức năng thanh toán
   router.post('/create-payment', payment.handleCreateNewPayment);
   router.get('/vnpay_return', payment.handleGetReturn);
+  
+  //test api
+  router.get('/get-payment-result', (req, res) => {
+    res.render('payment_result.ejs');
+  });
+
   return app.use('/api/', router);
 }
 

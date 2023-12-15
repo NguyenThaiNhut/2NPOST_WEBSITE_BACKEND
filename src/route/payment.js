@@ -5,7 +5,9 @@ var vnp_TmnCode = "PUWUWAAT";
 var vnp_HashSecret = "VSTEKMGKMWZEFOBKPAFFZZKMHHHFLEJL";
 var vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 var vnp_Api = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-var vnp_ReturnUrl = "http://localhost:5000/api/vnpay_return"; //link server + /api/vnpay_return
+var vnp_ReturnUrl = `${process.env.URL_REACT_RETURN_URL}/api/vnpay_return`; //link server + /api/vnpay_return
+
+import orderService from '../service/orderService';
 
 //tạo thanh toán
 let handleCreateNewPayment = async (req, res, next) => {
@@ -84,15 +86,32 @@ let handleGetReturn = async (req, res, next) => {
     if (secureHash === signed) {
         let responseCode = vnp_Params['vnp_ResponseCode'];
         let resultMessage = ''; // Định nghĩa thông điệp kết quả thanh toán dựa trên responseCode từ VNPAY
+        let orderIdValue = vnp_Params['vnp_TxnRef']; // id của đơn hàng
         if (responseCode === '00') {
             resultMessage = 'Thanh toán thành công';
+
+            await orderService.updateOrderPaymentStatus(orderIdValue, true, 1) // bật payment thành true, loại thanh toán 1 là chuyển khoản
+
+            return res.render('payment_result.ejs', {
+                errCode: 0,
+                message: resultMessage,
+                orderId: orderIdValue,
+            })
+
         } else {
             resultMessage = 'Thanh toán thất bại';
+
+            return res.render('payment_result.ejs', {
+                errCode: 1,
+                message: resultMessage,
+                orderId: orderIdValue,
+            })
         }
         console.log(resultMessage);
         return res.status(200).json({
             errCode: responseCode === '00' ? 0 : 1,
-            message: resultMessage
+            message: resultMessage,
+            orderId: vnp_Params['vnp_TxnRef'],
         });
     } else {
         return res.status(400).json({

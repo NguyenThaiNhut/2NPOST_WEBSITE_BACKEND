@@ -32,16 +32,28 @@ module.exports = function (sequelize, DataTypes) {
        * The `models/index` file will call this method automatically.
        */
       function associate(models) {
-        // define association here
+        this.hasMany(models.ServiceOfTransporter, {
+          foreignKey: 'idTransporter',
+          as: 'ServiceOfTransporter'
+        });
+        this.hasOne(models.User, {
+          foreignKey: 'idTransporter',
+          as: 'UserTransporter'
+        });
+        this.hasMany(models.Cost, {
+          foreignKey: 'idTransporter',
+          as: 'CostOfTransporter'
+        });
       }
     }]);
     return Transporter;
   }(Model);
   ;
   Transporter.init({
-    name: DataTypes.STRING,
+    transporterName: DataTypes.STRING,
     foundingDate: DataTypes.STRING,
-    status: DataTypes.STRING
+    description: DataTypes.STRING,
+    status: DataTypes.INTEGER
   }, {
     sequelize: sequelize,
     modelName: 'Transporter'

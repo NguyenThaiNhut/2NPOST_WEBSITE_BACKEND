@@ -11,6 +11,9 @@ module.exports = {
       payment: {
         type: Sequelize.BOOLEAN
       },
+      typePayment: {
+        type: Sequelize.INTEGER
+      },
       idOrder: {
         type: Sequelize.STRING
       },

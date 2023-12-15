@@ -496,7 +496,7 @@ let updateOrderPaymentStatus = (idOrder, payment, typePayment) => {
                 })
                 if (transportation) {
                     transportation.payment = payment;
-                    transportation.typePayment = typePayment;
+                    transportation.typePayment = typePayment; // tiền mặt 0, thanh toán 1
 
                     await transportation.save();
 

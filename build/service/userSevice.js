@@ -2,6 +2,8 @@
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 var _index = _interopRequireDefault(require("../models/index"));
+var _fs = _interopRequireDefault(require("fs"));
+var _path = _interopRequireDefault(require("path"));
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return { value: void 0, done: !0 }; } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable || "" === iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } throw new TypeError(_typeof(iterable) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
@@ -18,12 +20,12 @@ var createNewUser = function createNewUser(userInput) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            if (!userInput.email) {
-              _context.next = 26;
+            if (!userInput.phone) {
+              _context.next = 25;
               break;
             }
             _context.next = 4;
-            return checkUserEmail(userInput.email);
+            return checkUserPhoneBykeyRole(userInput.phone, userInput.keyRole);
           case 4:
             check = _context.sent;
             if (!check) {
@@ -32,13 +34,13 @@ var createNewUser = function createNewUser(userInput) {
             }
             resolve({
               errCode: 1,
-              message: 'Your email is already exist, Please try another email'
+              message: 'Số điện thoại đã tồn tại, vui lòng nhập số điện thoại khác!!!'
             });
-            _context.next = 24;
+            _context.next = 23;
             break;
           case 9:
             if (!userInput.password) {
-              _context.next = 23;
+              _context.next = 22;
               break;
             }
             _context.next = 12;
@@ -47,61 +49,64 @@ var createNewUser = function createNewUser(userInput) {
             hashPasswordFromBcrypt = _context.sent;
             _context.next = 15;
             return _index["default"].User.create({
-              firstName: userInput.firstName,
-              lastName: userInput.lastName,
+              userName: userInput.userName,
               birthday: userInput.birthday,
-              genderId: userInput.genderId === 'M' ? true : false,
+              keyGender: userInput.keyGender,
               address: userInput.address,
+              idDefaultLocation: userInput.idDefaultLocation,
+              image: userInput.image,
+              // image
               email: userInput.email,
               password: hashPasswordFromBcrypt,
               phone: userInput.phone,
               status: userInput.status,
-              idRole: userInput.idRole
+              keyRole: userInput.keyRole,
+              idTransporter: userInput.idTransporter
             });
           case 15:
             _context.next = 17;
             return _index["default"].User.findOne({
               where: {
-                email: userInput.email
+                phone: userInput.phone,
+                keyRole: userInput.keyRole
               },
               raw: true
             });
           case 17:
             user = _context.sent;
             delete user.password;
-            console.log('check user: ', user);
             resolve({
               errCode: 0,
               message: 'OK',
               data: user
             });
-            _context.next = 24;
+            _context.next = 23;
             break;
-          case 23:
+          case 22:
             resolve({
               errCode: 3,
-              message: 'Password not found'
+              message: 'Mật khẩu không được tìm thấy!!!'
             });
-          case 24:
-            _context.next = 27;
+          case 23:
+            _context.next = 26;
             break;
-          case 26:
+          case 25:
             resolve({
               errCode: 2,
-              message: 'Email not found'
+              message: 'Số điện thoại không được tìm thấy!!!'
             });
-          case 27:
-            _context.next = 32;
+          case 26:
+            _context.next = 31;
             break;
-          case 29:
-            _context.prev = 29;
+          case 28:
+            _context.prev = 28;
             _context.t0 = _context["catch"](0);
             reject(_context.t0);
-          case 32:
+          case 31:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 29]]);
+      }, _callee, null, [[0, 28]]);
     }));
     return function (_x, _x2) {
       return _ref.apply(this, arguments);
@@ -109,8 +114,9 @@ var createNewUser = function createNewUser(userInput) {
   }());
 };
 
-// kiểm tra email đã tồn tại trong database hay chưa, trả về true nếu đã tồn tại, ngược lại là false
-var checkUserEmail = function checkUserEmail(userEmail) {
+// kiểm tra phone đã tồn tại chưa, dựa vào ROLE, trả về true nếu phone này đã tạo role này rồi, false nếu phone này chưa tạo role
+// => dùng cho tạo tài khoản
+var checkUserPhoneBykeyRole = function checkUserPhoneBykeyRole(userPhone, Role) {
   return new Promise( /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(resolve, reject) {
       var user;
@@ -121,7 +127,8 @@ var checkUserEmail = function checkUserEmail(userEmail) {
             _context2.next = 3;
             return _index["default"].User.findOne({
               where: {
-                email: userEmail
+                phone: userPhone,
+                keyRole: Role
               }
             });
           case 3:
@@ -149,20 +156,29 @@ var checkUserEmail = function checkUserEmail(userEmail) {
   }());
 };
 
-//băm mật khẩu của người dùng  
-var hashUserPassword = function hashUserPassword(password) {
+// kiểm tra phone đã tồn tại trong database hay chưa, trả về true nếu đã tồn tại, ngược lại là false 
+// => dùng cho đăng nhập
+var checkUserPhone = function checkUserPhone(userPhone) {
   return new Promise( /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
-      var hashPassword;
+      var user;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
             _context3.prev = 0;
             _context3.next = 3;
-            return _bcryptjs["default"].hashSync(password, salt);
+            return _index["default"].User.findOne({
+              where: {
+                phone: userPhone
+              }
+            });
           case 3:
-            hashPassword = _context3.sent;
-            resolve(hashPassword);
+            user = _context3.sent;
+            if (user) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
             _context3.next = 10;
             break;
           case 7:
@@ -181,34 +197,66 @@ var hashUserPassword = function hashUserPassword(password) {
   }());
 };
 
-//lấy tất cả người dùng trong database
-var getAllUsers = function getAllUsers(userId) {
+//băm mật khẩu của người dùng  
+var hashUserPassword = function hashUserPassword(password) {
   return new Promise( /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(resolve, reject) {
-      var users;
+      var hashPassword;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             _context4.prev = 0;
+            _context4.next = 3;
+            return _bcryptjs["default"].hashSync(password, salt);
+          case 3:
+            hashPassword = _context4.sent;
+            resolve(hashPassword);
+            _context4.next = 10;
+            break;
+          case 7:
+            _context4.prev = 7;
+            _context4.t0 = _context4["catch"](0);
+            reject(_context4.t0);
+          case 10:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4, null, [[0, 7]]);
+    }));
+    return function (_x7, _x8) {
+      return _ref4.apply(this, arguments);
+    };
+  }());
+};
+
+//lấy tất cả người dùng trong database
+var getAllUsers = function getAllUsers(userId) {
+  return new Promise( /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(resolve, reject) {
+      var users;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
             users = '';
             if (!(userId === 'ALL')) {
-              _context4.next = 6;
+              _context5.next = 6;
               break;
             }
-            _context4.next = 5;
+            _context5.next = 5;
             return _index["default"].User.findAll({
               attributes: {
                 exclude: ['password']
               }
             });
           case 5:
-            users = _context4.sent;
+            users = _context5.sent;
           case 6:
             if (!(userId && userId !== 'ALL')) {
-              _context4.next = 10;
+              _context5.next = 10;
               break;
             }
-            _context4.next = 9;
+            _context5.next = 9;
             return _index["default"].User.findOne({
               where: {
                 id: userId
@@ -218,89 +266,20 @@ var getAllUsers = function getAllUsers(userId) {
               }
             });
           case 9:
-            users = _context4.sent;
+            users = _context5.sent;
           case 10:
             resolve(users);
-            _context4.next = 16;
+            _context5.next = 16;
             break;
           case 13:
-            _context4.prev = 13;
-            _context4.t0 = _context4["catch"](0);
-            reject(_context4.t0);
-          case 16:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4, null, [[0, 13]]);
-    }));
-    return function (_x7, _x8) {
-      return _ref4.apply(this, arguments);
-    };
-  }());
-};
-
-//đăng nhập
-var handleUserLogin = function handleUserLogin(email, password) {
-  return new Promise( /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(resolve, reject) {
-      var userData, isExist, user, check;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
-          case 0:
-            userData = {};
-            _context5.prev = 1;
-            _context5.next = 4;
-            return checkUserEmail(email);
-          case 4:
-            isExist = _context5.sent;
-            if (!isExist) {
-              _context5.next = 12;
-              break;
-            }
-            _context5.next = 8;
-            return _index["default"].User.findOne({
-              // attributes: ['email', 'roleId', 'password'],
-              where: {
-                email: email
-              },
-              raw: true
-            });
-          case 8:
-            user = _context5.sent;
-            // check email hop le?
-            if (user) {
-              check = _bcryptjs["default"].compareSync(password, user.password); // check pass hop le?
-              if (check) {
-                userData.errCode = 0;
-                userData.message = 'Login successful';
-                delete user.password;
-                userData.user = user;
-              } else {
-                userData.errCode = 4;
-                userData.message = 'Password mismatch';
-              }
-            } else {
-              userData.errCode = 3;
-              userData.message = "User's not found~";
-            }
-            _context5.next = 14;
-            break;
-          case 12:
-            userData.errCode = 2;
-            userData.message = "Your's email isn't exist in your system. Please try again";
-          case 14:
-            resolve(userData);
-            _context5.next = 20;
-            break;
-          case 17:
-            _context5.prev = 17;
-            _context5.t0 = _context5["catch"](1);
+            _context5.prev = 13;
+            _context5.t0 = _context5["catch"](0);
             reject(_context5.t0);
-          case 20:
+          case 16:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[1, 17]]);
+      }, _callee5, null, [[0, 13]]);
     }));
     return function (_x9, _x10) {
       return _ref5.apply(this, arguments);
@@ -308,72 +287,69 @@ var handleUserLogin = function handleUserLogin(email, password) {
   }());
 };
 
-// chỉnh sửa thông tin người dùng
-var updateUser = function updateUser(data) {
+//đăng nhập
+var handleUserLogin = function handleUserLogin(phone, password, keyRole) {
   return new Promise( /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(resolve, reject) {
-      var user;
+      var userData, isExist, user, check;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
-            _context6.prev = 0;
-            if (!data.id) {
-              _context6.next = 20;
-              break;
-            }
+            userData = {};
+            _context6.prev = 1;
             _context6.next = 4;
-            return _index["default"].User.findOne({
-              where: {
-                id: data.id
-              },
-              raw: false
-            });
+            return checkUserPhoneBykeyRole(phone, keyRole);
           case 4:
-            user = _context6.sent;
-            if (!user) {
-              _context6.next = 17;
+            isExist = _context6.sent;
+            if (!isExist) {
+              _context6.next = 12;
               break;
             }
-            user.firstName = data.firstName;
-            user.lastName = data.lastName;
-            user.birthday = data.birthday;
-            user.genderId = data.genderId;
-            user.address = data.address;
-            user.phone = data.phone;
-            _context6.next = 14;
-            return user.save();
-          case 14:
-            resolve({
-              errCode: 0,
-              message: 'The user has been updated'
+            _context6.next = 8;
+            return _index["default"].User.findOne({
+              // attributes: ['phone', 'roleId', 'password'],
+              where: {
+                phone: phone,
+                keyRole: keyRole
+              },
+              raw: true
             });
-            _context6.next = 18;
+          case 8:
+            user = _context6.sent;
+            // check phone hop le?
+            if (user) {
+              check = _bcryptjs["default"].compareSync(password, user.password); // check pass hop le?
+              if (check) {
+                userData.errCode = 0;
+                userData.message = 'Đăng nhập thành công!';
+                delete user.password;
+                userData.data = user;
+              } else {
+                userData.errCode = 4;
+                userData.message = 'Mật khẩu sai!!!';
+              }
+            } else {
+              userData.errCode = 3;
+              userData.message = "Ng\u01B0\u1EDDi d\xF9ng kh\xF4ng t\u1ED3n t\u1EA1i!!!";
+            }
+            _context6.next = 14;
+            break;
+          case 12:
+            userData.errCode = 2;
+            userData.message = "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i c\u1EE7a b\u1EA1n kh\xF4ng t\u1ED3n t\u1EA1i trong h\u1EC7 th\u1ED1ng. Vui l\xF2ng th\u1EED l\u1EA1i!!!";
+          case 14:
+            resolve(userData);
+            _context6.next = 20;
             break;
           case 17:
-            resolve({
-              errCode: 1,
-              message: "The user isn't exist"
-            });
-          case 18:
-            _context6.next = 21;
-            break;
-          case 20:
-            resolve({
-              errCode: 2,
-              message: 'missing required parameter'
-            });
-          case 21:
-            _context6.next = 26;
-            break;
-          case 23:
-            _context6.prev = 23;
-            _context6.t0 = _context6["catch"](0);
+            _context6.prev = 17;
+            _context6.t0 = _context6["catch"](1);
             reject(_context6.t0);
-          case 26:
+          case 20:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[0, 23]]);
+      }, _callee6, null, [[1, 17]]);
     }));
     return function (_x11, _x12) {
       return _ref6.apply(this, arguments);
@@ -381,32 +357,106 @@ var updateUser = function updateUser(data) {
   }());
 };
 
+// chỉnh sửa thông tin người dùng
+var updateUser = function updateUser(data) {
+  return new Promise( /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(resolve, reject) {
+      var user;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.prev = 0;
+            if (!data.id) {
+              _context7.next = 21;
+              break;
+            }
+            _context7.next = 4;
+            return _index["default"].User.findOne({
+              where: {
+                id: data.id
+              },
+              raw: false
+            });
+          case 4:
+            user = _context7.sent;
+            if (!user) {
+              _context7.next = 18;
+              break;
+            }
+            user.userName = data.userName;
+            user.birthday = data.birthday;
+            user.keyGender = data.keyGender;
+            user.email = data.email;
+            user.address = data.address;
+            user.image = data.image;
+            user.idDefaultLocation = data.idDefaultLocation;
+            _context7.next = 15;
+            return user.save();
+          case 15:
+            resolve({
+              errCode: 0,
+              message: 'Thông tin người dùng đã được cập nhật!'
+            });
+            _context7.next = 19;
+            break;
+          case 18:
+            resolve({
+              errCode: 1,
+              message: "Ng\u01B0\u1EDDi d\xF9ng kh\xF4ng t\u1ED3n t\u1EA1i!!!"
+            });
+          case 19:
+            _context7.next = 22;
+            break;
+          case 21:
+            resolve({
+              errCode: 2,
+              message: 'Vui lòng nhập thông tin!!!'
+            });
+          case 22:
+            _context7.next = 27;
+            break;
+          case 24:
+            _context7.prev = 24;
+            _context7.t0 = _context7["catch"](0);
+            reject(_context7.t0);
+          case 27:
+          case "end":
+            return _context7.stop();
+        }
+      }, _callee7, null, [[0, 24]]);
+    }));
+    return function (_x13, _x14) {
+      return _ref7.apply(this, arguments);
+    };
+  }());
+};
+
 // xóa người dùng theo id
 var deleteUser = /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(idUserDel) {
-    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-      while (1) switch (_context8.prev = _context8.next) {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(idUserDel) {
+    return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+      while (1) switch (_context9.prev = _context9.next) {
         case 0:
-          return _context8.abrupt("return", new Promise( /*#__PURE__*/function () {
-            var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(resolve, reject) {
+          return _context9.abrupt("return", new Promise( /*#__PURE__*/function () {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(resolve, reject) {
               var foundUser;
-              return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-                while (1) switch (_context7.prev = _context7.next) {
+              return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+                while (1) switch (_context8.prev = _context8.next) {
                   case 0:
-                    _context7.prev = 0;
-                    _context7.next = 3;
+                    _context8.prev = 0;
+                    _context8.next = 3;
                     return _index["default"].User.findOne({
                       where: {
                         id: idUserDel
                       }
                     });
                   case 3:
-                    foundUser = _context7.sent;
+                    foundUser = _context8.sent;
                     if (!foundUser) {
-                      _context7.next = 10;
+                      _context8.next = 10;
                       break;
                     }
-                    _context7.next = 7;
+                    _context8.next = 7;
                     return _index["default"].User.destroy({
                       where: {
                         id: idUserDel
@@ -415,40 +465,86 @@ var deleteUser = /*#__PURE__*/function () {
                   case 7:
                     resolve({
                       errCode: 0,
-                      message: 'The user has been deleted'
+                      message: 'Người dùng đã được xóa!'
                     });
-                    _context7.next = 11;
+                    _context8.next = 11;
                     break;
                   case 10:
                     resolve({
                       errCode: 2,
-                      message: "The user isn't exist"
+                      message: "Ng\u01B0\u1EDDi d\xF9ng kh\xF4ng t\u1ED3n t\u1EA1i!!!"
                     });
                   case 11:
-                    _context7.next = 16;
+                    _context8.next = 16;
                     break;
                   case 13:
-                    _context7.prev = 13;
-                    _context7.t0 = _context7["catch"](0);
-                    reject(_context7.t0);
+                    _context8.prev = 13;
+                    _context8.t0 = _context8["catch"](0);
+                    reject(_context8.t0);
                   case 16:
                   case "end":
-                    return _context7.stop();
+                    return _context8.stop();
                 }
-              }, _callee7, null, [[0, 13]]);
+              }, _callee8, null, [[0, 13]]);
             }));
-            return function (_x14, _x15) {
-              return _ref8.apply(this, arguments);
+            return function (_x16, _x17) {
+              return _ref9.apply(this, arguments);
             };
           }()));
         case 1:
         case "end":
-          return _context8.stop();
+          return _context9.stop();
       }
-    }, _callee8);
+    }, _callee9);
   }));
-  return function deleteUser(_x13) {
-    return _ref7.apply(this, arguments);
+  return function deleteUser(_x15) {
+    return _ref8.apply(this, arguments);
+  };
+}();
+var removeFileService = /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(fileName) {
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          return _context11.abrupt("return", new Promise( /*#__PURE__*/function () {
+            var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(resolve, reject) {
+              var directoryPath;
+              return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+                while (1) switch (_context10.prev = _context10.next) {
+                  case 0:
+                    try {
+                      directoryPath = _path["default"].join(__dirname, "../public");
+                      _fs["default"].unlink(directoryPath + fileName, function (err) {
+                        if (err) {
+                          resolve({
+                            message: "Could not delete the file. " + err
+                          });
+                        }
+                        resolve({
+                          message: "File is deleted."
+                        });
+                      });
+                    } catch (error) {
+                      reject(error);
+                    }
+                  case 1:
+                  case "end":
+                    return _context10.stop();
+                }
+              }, _callee10);
+            }));
+            return function (_x19, _x20) {
+              return _ref11.apply(this, arguments);
+            };
+          }()));
+        case 1:
+        case "end":
+          return _context11.stop();
+      }
+    }, _callee11);
+  }));
+  return function removeFileService(_x18) {
+    return _ref10.apply(this, arguments);
   };
 }();
 module.exports = {
@@ -456,5 +552,8 @@ module.exports = {
   getAllUsers: getAllUsers,
   createNewUser: createNewUser,
   deleteUser: deleteUser,
-  updateUser: updateUser
+  updateUser: updateUser,
+  checkUserPhoneBykeyRole: checkUserPhoneBykeyRole,
+  hashUserPassword: hashUserPassword,
+  removeFileService: removeFileService
 };

@@ -11,6 +11,9 @@ module.exports = {
       idCustomer: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.STRING
+      },
       senderName: {
         type: Sequelize.STRING
       },
@@ -51,6 +54,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       totalCost: {
+        type: Sequelize.STRING
+      },
+      note: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -33,7 +33,8 @@ app.use(_express["default"].urlencoded({
 app.use(_express["default"].json()); // To parse the incoming requests with JSON payloads
 
 (0, _viewEngine["default"])(app);
-(0, _web["default"])(app);
+
+// initWebRoute(app);
 
 //viet api
 (0, _api["default"])(app);
